@@ -1,0 +1,119 @@
+<!doctype html>
+
+<head>
+  <meta charset="utf-8">
+
+  <title></title>
+  <meta name="description" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/demo.css">
+
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+</head>
+
+<body>
+
+  <div id="container">
+    <header>
+    </header>
+    <div id="main" role="main">
+      <h1>Touch Test</h1>
+      <p># touches: <span id="numtouches">0</span></p>
+      <p>Touches:<br>
+       <span  id="touchset"></span></p>
+      <p>Changed Touches:<br>
+        <span id="changedset"></span>
+      </p>
+      <p>Target Touches<br>
+        <span id="targettouchset"></span>
+      </p>
+      <p id="msg">Nothing</p>
+    </div>
+    <footer>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac sem erat. Curabitur odio lacus, dictum non ultrices nec, vestibulum ut ipsum. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce vehicula lacinia turpis, sit amet condimentum felis accumsan non. Nunc hendrerit lectus id quam scelerisque ut fermentum felis volutpat. Ut sit amet feugiat lorem. Vivamus faucibus pretium urna, eu commodo dui convallis quis. Proin eget risus mauris. Fusce eros nulla, porta nec placerat et, ultrices non leo. Curabitur vitae purus id dolor semper imperdiet. Aenean interdum urna purus, a blandit erat. Nulla vitae nisl nulla, ac venenatis risus. Nam auctor vehicula massa, eget malesuada sapien adipiscing id. Phasellus ut eros lorem, at commodo massa. Sed quis metus diam, quis tincidunt velit. Ut massa nunc, fringilla sit amet pretium at, interdum eu lectus.</p>
+
+<p>Duis rhoncus, dui sed pretium dictum, lorem ligula vestibulum felis, ut placerat sem sem non ante. Nulla eros lectus, euismod sit amet tempus non, rutrum vel turpis. Vivamus tempus nisi eu libero viverra ullamcorper. Sed cursus vulputate dui quis laoreet. Sed mattis vehicula porttitor. Vestibulum faucibus, diam nec imperdiet viverra, leo leo vestibulum arcu, vitae vehicula neque diam vel orci. Sed quis lorem lectus, non euismod dolor. Aliquam eget nulla ante. Praesent nibh nibh, pellentesque eget pellentesque ut, volutpat quis sem. Donec vulputate rutrum rhoncus. Nam condimentum varius ipsum, vel congue metus tincidunt in.</p>
+
+<p>Proin interdum, ipsum quis laoreet interdum, tellus eros fermentum sem, blandit pharetra lectus urna eu dolor. Vestibulum gravida tempus scelerisque. Cras eleifend turpis eget lectus sodales sodales. Ut imperdiet quam quis tortor porttitor dignissim. Morbi eleifend velit sed enim porttitor molestie. Donec rhoncus tempus arcu at vestibulum. Nam viverra hendrerit orci eget elementum. Sed porttitor metus vitae lectus aliquam molestie. Phasellus dolor arcu, cursus et pharetra iaculis, tristique at turpis. Quisque commodo ornare mi, in faucibus diam bibendum non.</p>
+
+<p>Donec et purus ut sem pellentesque scelerisque sit amet ac risus. In vel mi eu lectus congue elementum eleifend quis tellus. In scelerisque tempus nunc quis pharetra. Fusce odio leo, varius vel auctor ultricies, accumsan in lacus. Maecenas consectetur purus quis libero fringilla hendrerit non sit amet turpis. Nulla facilisi. Sed ullamcorper facilisis nibh, eget blandit neque bibendum sit amet.</p>
+
+<p>Cras facilisis enim non leo tempus tristique. Vivamus nec elit arcu, ut accumsan sem. Curabitur porta eros eget leo pretium eget suscipit elit scelerisque. Donec sapien mauris, eleifend id aliquet quis, dignissim ut ante. Curabitur rhoncus tempor nisl, ut tristique nibh semper vel. Nunc ac ipsum nec nisl pulvinar placerat. Maecenas convallis ultricies libero vel dapibus. In neque felis, facilisis in laoreet quis, lacinia vel diam. Sed eu nunc vitae enim consectetur malesuada ut at odio. Fusce gravida quam eget libero elementum tempor. Maecenas in dolor orci. Aliquam ut justo eget nunc egestas cursus eget quis nisl. Nam commodo ligula in mauris porttitor rutrum interdum odio accumsan. Sed ac sem luctus felis tempor fermentum sed in risus. Nunc velit nunc, lacinia eget consequat a, viverra sit amet nisi.</p>
+    </footer>
+  </div> <!--! end of #container -->
+
+
+  <script src="js/libs/jquery-1.7.1.min.js"></script>
+
+  <!-- scripts concatenated and minified via ant build script -->
+  <script src="js/helper.js"></script>
+  <!-- end concatenated and minified scripts-->
+  
+  <!--<script src="js/demo.js"></script>-->
+  <script>
+  function touch_point(touch) {
+    // returns string showing touch elements
+    var str = "ID: " + touch.identifier;
+    str += " px: " + touch.pageX;
+    str += " py: " + touch.pageY;
+    str += " sx: " + touch.screenX;
+    str += " sy: " + touch.screenY;
+    str += " cx: " + touch.clientX;
+    str += " cy: " + touch.clientY;
+    str += " target: " + touch.target.nodeName;
+    return (str);  
+  }  
+
+
+  function write_touch_data(touches, writer) {
+    var touch_str = "";
+    for (var i=0; i<touches.length; i++) {
+      var touch = touches[i];
+      touch_str += touch_point(touch) + "<br>";
+    }
+    writer.html(touch_str);
+  }
+  
+  document.getElementById("main").addEventListener("touchstart", touch_start, false);
+  document.getElementById("main").addEventListener("touchend", touch_end, false);
+  document.getElementById("main").addEventListener("touchmove", touch_move, false);
+  
+  var currentelement = null;
+  function touch_start(evt) {
+    evt.preventDefault();
+    currentElement = this;
+    var touches = evt.touches;
+    var changed = evt.changedTouches;
+    $("#changedset").text("Added " + changed.length + " touches at" + touch_point(changed[0]))
+    write_touch_data(touches, $("#touchset"));
+  }
+
+  function touch_end(evt) {
+    var touches = evt.touches;
+    var changed = evt.changedTouches;
+    $("#changedset").text("Removed " + changed.length + " touches at" + touch_point(changed[0]))
+    write_touch_data(touches, $("#touchset"));
+  }
+
+  function touch_move(evt) {
+    evt.preventDefault();
+    var targettouches = evt.targetTouches;
+    var touches = evt.touches;
+    $("#numtouches").text(touches.length);
+    write_touch_data(targettouches, $("#targettouchset"));
+    write_touch_data(touches, $("#touchset"));
+  }
+  
+ 
+  </script>
+
+  <!--<script src="https://getfirebug.com/firebug-lite.js">
+  </script>-->
+
+</body>
+</html>

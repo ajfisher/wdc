@@ -1,0 +1,327 @@
+<!doctype html>
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Ecom Touch Demo</title>
+  <meta name="description" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ecom.css">
+
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+</head>
+
+<body style="padding: 0px; margin: 0px;">
+
+  <div id="container">
+    <header style="border: 1px solid white;">
+      <p>Some ecommerce site</p>
+      <ul id="nav">
+        <li>Nav 1</li>
+        <li>nav 2</li>
+        <li>Nav 3</li>
+        <li>Cart link</li>
+      </ul> 
+    </header>
+    <div role="main" id="main">
+      <div id="image_carousel">
+        <ul id="panes">
+          <li><img src="img/ecom/2.JPG"/></li>
+          <li><img src="img/ecom/1.JPG"/></li>
+          <li><img src="img/ecom/3.JPG"/></li>
+        </ul>
+      </div>
+      <div id="product_data">
+        <h1>Product name</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lobortis dapibus orci mollis interdum. Suspendisse volutpat suscipit augue, lacinia laoreet magna mollis id. Vestibulum ultricies leo non diam rhoncus varius. Sed nisi elit, bibendum eget convallis quis, dapibus at quam. Morbi vestibulum venenatis mauris id egestas. Proin elementum tempus tincidunt. </p>
+        <p id="price">$23.45</p>
+        <div id="sizes">
+          <ul>
+            <li><a href="#">S</a></li>
+            <li><a href="#">M</a></li>
+            <li><a href="#">L</a></li>
+            <li><a href="#">XL</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <p><a href="#" id="next">next</a></p>
+    </div>
+
+    <div id="cart">
+      This is the cart zone that pops up and also holds all of the cart information.
+    </div>
+        <p>Start: <span id="tstart"></span></p>
+        <p>Current: <span id="current"></span></p>
+        <p>Status: <span id="status"></span></p>
+        <p>Swipe data: <span id="data"></span></p>
+  </div> <!--! end of #container -->
+
+
+  <script src="js/libs/jquery-1.7.1.min.js"></script>
+
+  
+  <script src="js/ecom.js"></script>
+  <script>
+
+
+    document.getElementById("panes").addEventListener("touchstart", check_gesture, false);
+    document.getElementById("panes").addEventListener("touchend", end_gesture, false);
+    document.getElementById("panes").addEventListener("touchmove", do_gesture, false);
+
+    var state = "DEFAULT",
+      current_pane = 0,
+      current_offset = 0,
+      carousel_started = null,
+      carousel_move_fully = false;
+
+    carousel_pane = $("#panes li:first-child");
+
+    carousel = document.getElementById("panes");
+    panel_count = carousel.children.length;
+    pane_width = carousel_pane.width();
+    tolerance = pane_width / 3; // drop this to see how far you need to pull across before it shifts
+
+
+    var scaling = false,
+      dist = 0,
+      scale_factor = 1.0,
+      curr_scale = 1.0,
+      damp_factor = 1.0,  //this scales how agressive the scale actually is.
+      max_zoom = 2.5,
+      min_zoom = 1.0;
+
+    var curr_panx = 0, curr_pany =0, pan_started = null;
+
+    document.getElementById("next").addEventListener("click", nextclick, false);
+
+    function nextclick (e) {
+      //transformprop = Modernizr.prefixed('transform');
+      //carousel.children.style["WebKitTransform"] = 'translateX(-50px)';
+          for (var i=0; i < carousel.children.length; i++){
+            carousel.children[i].style["WebkitTransform"] = 'translateX(-200px)';
+          }
+      //carousel.style["WebkitTransform"] = 'translateX(-200px)';
+
+    }
+
+
+    var TF_H_DIRECTION = {
+      LEFT: 0,
+      RIGHT: 1,
+      STILL: 2 
+    };
+
+    var TF_V_DIRECTION = {
+      UP: 0,
+      DOWN: 1,
+      STILL: 2
+    };
+
+
+    function check_gesture(e){
+      e.preventDefault();
+
+      transition_period('none');
+      // check number of touches compared to state
+      if (state == "DEFAULT" && e.targetTouches.length == 1) {
+        // let's do some swiping
+        state = "CAROUSEL";
+        carousel_started = $.extend({}, e.changedTouches[0]);
+        write_touch_data(carousel_started, $("#tstart"));
+        $("#status").text(state);
+        return;
+      }
+
+      if (e.targetTouches.length >= 2) {
+        state = "ZOOMING";
+        // lock the position of the image where it should be. 
+        carousel_position(-1*current_offset);
+        dist = distance(e.targetTouches[0], e.targetTouches[1]);
+        $("#data").html("Dist:" + dist);
+        return;
+      }
+
+      if (e.targetTouches.length == 1 && state == "ZOOMING") {
+        // we are basically in a panning context now so here we move the image around on finger track
+        state = "PANNING";
+        pan_started = $.extend({}, e.changedTouches[0]);
+        write_touch_data(pan_started, $("#tstart"));
+        $("#status").text(state);
+        return;
+      }
+
+    }
+
+    function end_gesture(e){
+        switch(state){
+          case "CAROUSEL":
+            // so here we need to determine if the tolerance was exceeded and in which direction.
+            // so we can finish off the animation to the next item.
+            swipe = relative_position(carousel_started, e.changedTouches[0]);
+            $("#data").html("move to: " + swipe.h_direction);
+            if (carousel_move_fully) {
+
+              if (swipe.h_direction == TF_H_DIRECTION.LEFT) {
+                // we finalise the move to the next pane if we haven't exhausted them
+                if (++current_pane >= panel_count) current_pane = panel_count-1;
+                current_offset = current_pane*pane_width;
+              } else {
+                // finalise and move to the previous one if we're not at the start
+                if (--current_pane < 0) current_pane = 0;
+                current_offset = current_pane*pane_width;
+              }
+            } 
+            transition_period('1s');
+            carousel_position(-1*current_offset);
+            state = "DEFAULT";
+            return;
+
+          case "ZOOMING":
+            // so here we check number of touches and then just clean up positions etc.
+            if (e.targetTouches.length <2 ) {
+              if (curr_scale < min_zoom) {
+                  scale_factor = min_zoom;
+              } else {
+                  if (curr_scale > max_zoom) {
+                    scale_factor = max_zoom;
+                  } else {
+                    scale_factor = curr_scale;
+                  }
+              }
+              zoom_image(current_pane, scale_factor, (-1*current_offset));
+              if (scale_factor > min_zoom) {
+                state = "ZOOMING";
+              } else {
+                state = "DEFAULT";
+              }
+            }
+            return;
+
+          case "PANNING":
+            // so here we'll just clean up.
+            // first off lets maintain state.
+            pan = relative_position(carousel_started, e.changedTouches[0]);
+            curr_panx = pan.relX;
+            curr_pany = pan.relY;
+            //carousel.children[current_pane].style.WebkitTransformOrigin =  "0px 0px";
+            state = "ZOOMING";
+            return;
+        }
+    }
+
+    function do_gesture(e){
+      e.preventDefault();
+      switch(state){
+        case "CAROUSEL":
+          // look at current finger position compared to the touch start so we can see left or right.
+          write_touch_data(e.targetTouches[0], $("#current"));
+          swipe = relative_position(carousel_started, e.targetTouches[0]);
+          // we're only interested in left and right position.      
+          if (Math.abs(swipe.relX) > tolerance) {
+            carousel_move_fully = true; // this is used on touch_end to determine the animation point.
+          } else {
+            carousel_move_fully = false;
+          }
+          carousel_position(-1*(current_offset) + swipe.relX);
+          break;
+
+        case "ZOOMING":
+          // look at the positions relative to the starting ones and then zoom in or out
+          // don't forget to consider the position of the item in the carousel overall as well.
+          distance_now = distance(e.targetTouches[0], e.targetTouches[1]);
+          curr_scale = distance_now / dist * scale_factor * damp_factor;
+          $("#data").text("translateX(" + (-1*current_offset) + "px) scale(" + curr_scale + ", " + curr_scale + ")");
+          zoom_image(current_pane, curr_scale, (-1*current_offset))
+          break;
+
+        case "PANNING":
+          // move the item under the touch so you can see it better.
+          pan = relative_position(pan_started, e.targetTouches[0]);
+          px = curr_panx+pan.relX;
+          py = curr_pany+pan.relY;
+          $("#data").text(pan_started.clientX + " " + pan_started.clientY)
+          //carousel.children[current_pane].style.WebkitTransformOrigin =  ((pan_started.clientX/curr_scale)) + " " + pan_started.clientY/curr_scale;
+          pan_image(current_pane, px, py, curr_scale, (-1*current_offset));
+          break;
+      }
+    }
+
+
+    function carousel_position(x){
+      // sets the offset position for the items in the carousel and the time to animate to them
+      for (var i=0; i < carousel.children.length; i++){
+        carousel.children[i].style["WebkitTransform"] = 'translate3d(' + x + 'px, 0, 0)';
+      }
+    }
+
+    function transition_period(t){
+      for (var i=0; i < carousel.children.length; i++){
+        carousel.children[i].style["WebkitTransition"] = t;
+      }
+    }
+
+    function pan_image(item, panx, pany, zoom_amount, x_offset){
+      // moves the item around under the touch when under zoom conditions.
+      // Need to stack a set of tranforms together.
+
+      // normalise the numbers appropriately.
+      newx = panx / zoom_amount;
+      newy = pany / zoom_amount;
+      $("#data").text("calculated newiws");
+
+      var transform = "scale(" + zoom_amount + ", " + zoom_amount + ") ";
+      transform += "translateX(" + newx + "px) ";
+      transform += "translateY(" + newy + "px) ";
+      $("#data").text(transform + " px: " + panx + " py: " + pany + " cx: " + curr_panx + " cy: " + curr_pany);
+      carousel.children[item].style["WebkitTransform"] = transform;
+
+    }
+
+    function zoom_image(item, zoom_amount, x_offset) {
+      // for the item, zoom the amount provided and ensure the correct offset is provided as there's some positional considerations
+      carousel.children[item].style["WebkitTransform"] = "translateX(" + x_offset + "px) scale(" + zoom_amount + ", " + zoom_amount + ")";
+
+    }
+
+    function relative_position (original, current) {
+      // checks the current touch object against the original one and passes back an object which has the pertinent details
+
+      var swipe_data = {
+          relX: (current.pageX - original.pageX),
+          relY: (current.pageY - original.pageY)
+      }
+      swipe_data["v_direction"] = (swipe_data.relY < 0) ? TF_V_DIRECTION.UP : TF_V_DIRECTION.DOWN;
+      swipe_data["h_direction"] = (swipe_data.relX < 0) ? TF_H_DIRECTION.LEFT : TF_H_DIRECTION.RIGHT;
+      return (swipe_data);
+
+    }
+
+    function distance (p1, p2) {
+        // pass over 2 touch points and pass back the cartesian distance between them.
+        return (Math.sqrt(Math.pow((p1.clientX - p2.clientX), 2) + Math.pow((p1.clientY - p2.clientY), 2)));
+    }
+
+  function write_touch_data(touch, writer) {
+    var touch_str = "";
+      var the_str = "ID: " + touch.identifier;
+      the_str += " px: " + touch.pageX;
+      the_str += " py: " + touch.pageY;
+      the_str += " sx: " + touch.screenX;
+      the_str += " sy: " + touch.screenY;
+      the_str += " cx: " + touch.clientX;
+      the_str += " cy: " + touch.clientY;
+      the_str += " target: " + touch.target.nodeName;
+      the_str += "<br>";
+      
+      touch_str += the_str;
+    writer.html(touch_str);
+  }
+
+  </script>
+</body>
+</html>

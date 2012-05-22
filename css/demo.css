@@ -1,0 +1,16 @@
+#box {
+    color: #abcdef;
+    background-color: #abcdef;
+    width: 50%;
+    height: 200px;
+}
+
+#main {
+    border: 1px solid blue;
+    margin-bottom: 30px;
+}
+
+footer p {
+
+	font-size: 12pt;
+}

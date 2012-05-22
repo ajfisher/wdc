@@ -1,0 +1,64 @@
+<!doctype html>
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Single Touch Demo</title>
+  <meta name="description" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/demo.css">
+
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+</head>
+
+<body style="padding: 0px; margin: 0px;">
+
+  <div id="container">
+    <header style="border: 1px solid white;">
+      <h1>Single Touch Demo</h1>
+    </header>
+    <div style="text-align: center;">
+      <canvas id="canv" height="500" width="800" style="border: 1px solid blue;"></canv>
+    </div>
+  </div> <!--! end of #container -->
+
+
+  <script src="js/libs/jquery-1.7.1.min.js"></script>
+
+  <script src="js/draw_touch.js"></script>
+  <script>
+
+
+  // should have an init'd canvas object by now.
+  
+  var start_point = null;
+  var end_point = null;
+  var current_point = null;
+
+  var canvas = document.getElementById("canv");
+
+  canvas.addEventListener("touchstart",  (function(evt) {
+      evt.preventDefault();
+      start_point = $.extend({}, evt.changedTouches[0]);
+      end_point = null;
+      draw_touches();
+    }), false);
+  canvas.addEventListener("touchend", (function(evt) {
+      end_point = evt.changedTouches[0];
+      current_point = null;
+      draw_touches();
+  }), false);
+  canvas.addEventListener("touchmove", (function(evt) {
+    evt.preventDefault();
+    current_point = evt.targetTouches[0];
+    draw_touches();
+  }), false);
+  
+  </script>
+
+
+</body>
+</html>

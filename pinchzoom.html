@@ -1,0 +1,123 @@
+<!doctype html>
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Pinch Zoom Demo</title>
+  <meta name="description" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/demo.css">
+
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+</head>
+
+<body style="padding: 0px; margin: 0px;">
+
+  <div id="container" style="margin-left: auto; margin-right: auto; width: 900px;">
+    <header style="border: 1px solid white;">
+      <h1>Pinch Zoom Demo</h1>
+    </header>
+    <div id="imageframe" style="border: 2px solid black; overflow: hidden; width: 600px; height: 450px;">
+        <img id="imgzoom" src="img/lego.jpg" style="height: 450px; width: 600px; overflow: hidden;"/>
+    </div>
+    <div id="details" >
+    <p>Touches: <span id="numtouches"></span> / Distance: <span id="distance"></span> / Scale: <span id="scale"></span></p>
+    <p>Image (CC) J5</p>
+    </div>
+    <footer>
+        <p></p>
+    </footer>
+  </div> <!--! end of #container -->
+
+
+  <script src="js/libs/jquery-1.7.1.min.js"></script>
+
+  <!-- scripts concatenated and minified via ant build script -->
+  <script src="js/helper.js"></script>
+  <!-- end concatenated and minified scripts-->
+  
+  <script src="js/draw_touch.js"></script>
+  <script>
+
+    $(document).ready(function() {
+    
+        // set the image correctly.
+        
+    
+    });
+
+    var imgzoom = document.getElementById("imgzoom");
+
+    
+    var scaling = false;
+    var dist = 0;
+    var scale_factor = 1.0;
+    var curr_scale = 1.0;
+    var max_zoom = 5.0;
+    var min_zoom = 1.0
+    
+
+    document.getElementById("imgzoom").addEventListener("touchstart", check_zoom, false);
+    document.getElementById("imgzoom").addEventListener("touchend", end_zoom, false);
+    document.getElementById("imgzoom").addEventListener("touchmove", do_zoom, false);
+    
+
+
+    function distance (p1, p2) {
+        // pass over 2 touch points and pass back the cartesian distance between them.
+        return (Math.sqrt(Math.pow((p1.clientX - p2.clientX), 2) + Math.pow((p1.clientY - p2.clientY), 2)));
+    }
+
+
+    function check_zoom(evt) {
+        evt.preventDefault();
+        var tt = evt.targetTouches;
+        $("#numtouches").text(tt.length);
+        // check to see if we have two touches on screen at once.
+        if (tt.length >= 2) {
+            // check distance between the first two points. 
+            dist = distance(tt[0], tt[1]);
+            $("#distance").text(dist);
+            scaling = true;
+        } else {
+            scaling = false;
+        }
+    }
+    
+    function end_zoom(evt) {
+        var tt = evt.targetTouches;
+        if (tt.length < 2) {
+            scaling = false;
+            if (curr_scale < min_zoom) {
+                scale_factor = min_zoom;
+            } else {
+                if (curr_scale > max_zoom) {
+                  scale_factor = max_zoom;
+                } else {
+                  scale_factor = curr_scale;
+                }
+            }
+            imgzoom.style.WebkitTransform = "scale(" + scale_factor + ", " + scale_factor + ")";  
+            $("#scale").text(scale_factor);
+        } else {
+            scaling = true;
+        }
+    }
+    
+    function do_zoom(evt) {
+        evt.preventDefault();
+        var tt = evt.targetTouches;
+        if (scaling) {
+            distance_now = distance(tt[0], tt[1]);
+            curr_scale = distance_now / dist * scale_factor;
+            $("#scale").text(curr_scale);
+            imgzoom.style.WebkitTransform = "scale(" + curr_scale + ", " + curr_scale + ")";
+        }
+    }
+  </script>
+</body>
+</html>

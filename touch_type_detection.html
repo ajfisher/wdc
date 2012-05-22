@@ -1,0 +1,51 @@
+<!doctype html>
+
+<head>
+  <meta charset="utf-8">
+
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/demo.css">
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+</head>
+
+<body>
+
+  <div id="container">
+    <header>
+    </header>
+    <div id="main" role="main">
+      <h1>Touch Test</h1>
+      <p>Can I touch? <span id="touchstatus"></span></p>
+      <h1>Gesture Test</h1>
+      <p>Can I do Gesture? <span id="gesturestatus"></span></p>
+      <h1>Multitouch test</h1>
+      <p>Can I multitouch? <span id="multistatus"></span></p>
+      <p id="touchset"></p>
+    </div>
+    <footer>
+    </footer>
+  </div> <!--! end of #container -->
+
+
+  <script src="js/libs/jquery-1.7.1.min.js"></script>
+
+  <!-- scripts concatenated and minified via ant build script -->
+  <script src="js/helper.js"></script>
+  <!-- end concatenated and minified scripts-->
+  
+  <script src="js/touchyfeely.js"></script>
+  <script>
+    $("#touchstatus").text(touchyfeely.touch ? "Yes" : "No");
+    $("#gesturestatus").text(touchyfeely.gesture ? "Yes" : "No");
+    $("#multistatus").text(touchyfeely.multitouch ? "Yes" : "No");
+  </script>
+
+  <!--<script src="https://getfirebug.com/firebug-lite.js">
+  </script>-->
+
+</body>
+</html>
