@@ -1,6 +1,6 @@
 
 code.bash
-.swp
+*.swp
 .swo
 css/.DS_Store
 
