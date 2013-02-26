@@ -7,6 +7,8 @@ It is licenced using the MIT licence so feel free to use or fork the code as muc
 
 In here there are a range of demos for touch interface behaviour for web applications using the HTML Touch API.
 
+These elements are self contained on the WDC12 branch in the repo that lives at github.com/ajfisher/wdc.git
+
 List of files:
 ---------------
 
