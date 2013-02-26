@@ -16,20 +16,19 @@ var fps = 60;
 var step = 1/fps; // how often to attempt to get a new frame.
 var width = 800;
 var height = 500;
-var canvas = null; //document.getElementById("canv");
-var ctx = null; //canvas.getContext("2d");
+var canvas = null;
+var ctx = null;
 
 // camera and FOV settings
 var camera_depth = 0.8;
 var camera_height = 1000;
-
+var player_z_scale = null;
 
 // constants
 var COLOURS = {
-  SKY:  '#72D7EE',
-  TREE: '#005108',
-  LIGHT:  { road: '#6B6B6B', grass: '#10AA10', curb: '#555555' },
-  DARK:   { road: '#696969', grass: '#009A00', curb: '#BBBBBB' },
+  SKY:  'cyan',
+  LIGHT:  { road: '#6B6B6B', grass: '#10AA10', curb: 'white' },
+  DARK:   { road: '#696969', grass: '#009A00', curb: 'red' },
   START:  { road: 'white',   grass: '#10AA10',   curb: 'white' },
   FINISH: { road: 'black',   grass: '#009A00',   curb: 'black' }
 };
@@ -41,18 +40,23 @@ var KEY = {
   DOWN:  40,
 };
 
+var PLAYER = { w: 80, h: 50, colour: "#ffffff" };
+
 // segment set up
 var segments = [];          // array of all the road segments in the level.
 var road_width = 2000; 
 var segment_length = 200;   // length of an individual segment in the road.
 var curb_segments = 4;      // number of segments used for each curb piece.
 var track_length = null;    // determined when you load the track.
-var finish_offset = 3*curb_segments;// number of segments to finish from the end.
-var MAX_SEGMENTS = 500;
 var draw_distance = 200;    // number of segments to draw out.
+var finish_offset = 0.75*draw_distance;// number of segments to finish from the end.
+var MAX_SEGMENTS = 500 + finish_offset;
+// sprite scale
+var sprite_scale = 0.3 * (1 / PLAYER.w) * road_width // this helps scale for the size of the road
 
 // player details
 var player_x = 0;
+var player_z = null;
 var speed = 0;
 var position = 0;          // position of the player on the length of the track.
 var max_speed = segment_length/step; // TODO
@@ -68,14 +72,14 @@ var key_accel = false;
 var key_decel = false;
 
 function project (p, camerax, cameray, cameraz, camera_depth, width, height, road_width) {
-        // takes a point and projects it on to the screen
-        p.camera.x     = (p.world.x || 0) - camerax;
-        p.camera.y     = (p.world.y || 0) - cameray;
-        p.camera.z     = (p.world.z || 0) - cameraz;
-        p.screen.scale = camera_depth/p.camera.z;
-        p.screen.x     = Math.round((width/2)  + (p.screen.scale * p.camera.x  * width/2));
-        p.screen.y     = Math.round((height/2) - (p.screen.scale * p.camera.y  * height/2));
-        p.screen.w     = Math.round(             (p.screen.scale * road_width   * width/2));
+    // takes a point and projects it on to the screen
+    p.camera.x     = (p.world.x || 0) - camerax;
+    p.camera.y     = (p.world.y || 0) - cameray;
+    p.camera.z     = (p.world.z || 0) - cameraz;
+    p.screen.scale = camera_depth/p.camera.z;
+    p.screen.x     = Math.round((width/2)  + (p.screen.scale * p.camera.x  * width/2));
+    p.screen.y     = Math.round((height/2) - (p.screen.scale * p.camera.y  * height/2));
+    p.screen.w     = Math.round(             (p.screen.scale * road_width   * width/2));
 }
 
 var Draw = {
@@ -115,15 +119,25 @@ var Draw = {
 
     background: function() {
         // draws the background in
-
         ctx.fillStyle = COLOURS.SKY;
         ctx.fillRect(0, 0, width, height);
-
     },
 
-    player: function(ctx ) {
+    player: function() {
         // draws the racer in
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = "#ffffff";
+
+        // this compensates the scale factors of the vehicle etc back to 
+        // the overall scale of the display
+        w = (PLAYER.w * player_z_scale * width / 2) * sprite_scale;
+        h = (PLAYER.h * player_z_scale * width /2) * sprite_scale;
+
+        // this creates the relative offset to then draw the item.
+        x = width /2 + (w * -0.5);
+        y = height + (h * -1.0); 
+
+        // TODO Actually draw the car...
+        ctx.fillRect(x, y, w , h);
     }
 
 }
@@ -201,6 +215,10 @@ function setup() {
     canvas.height = height;
 
     setup_listeners();
+
+    player_z = (camera_height * camera_depth);
+    player_z_scale = (camera_depth / player_z);
+
 }
 
 function draw_frame() {
@@ -228,7 +246,7 @@ function draw_frame() {
 
     }
 
-    //Draw.racer();
+    Draw.player();
 
     $("#speed").text("Speed: " + speed);
     $("#maxspeed").text("Max: " + max_speed);
@@ -238,9 +256,9 @@ function draw_frame() {
 function update(dt) {
 
     position = position + (dt * speed);
-    if (position > (track_length - finish_offset)) {
+    if (position > (track_length - (finish_offset * segment_length))) {
         console.log("Finished the race");
-        position = track_length - finish_offset;
+        position = track_length - (finish_offset * segment_length);
         key_accel = false;
         speed = 0;
     }
@@ -290,9 +308,6 @@ var Racer = {
 
     run: function() {
         // the actual bit that runs
-        
-        // set the key listener here in a moment.
-        
         var now = null;
         var last = new Date().getTime();
         dt = 0;
