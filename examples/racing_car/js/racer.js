@@ -46,27 +46,28 @@ var PLAYER = { w: 80, h: 50, colour: "#ffffff" };
 var ROAD = {
     LENGTH: { NONE: 0, SHORT:  25, MEDIUM:  50, LONG:  100 }, // num segments
     CURVE:  { NONE: 0, EASY:    2, MEDIUM:   4, HARD:    6 },
+
     add_segment: function (curve) {
         var n = segments.length;
         segments.push({
             index: n,
-            p1: { world: { z:  n * segmentLength }, camera: {}, screen: {} },
-            p2: { world: { z: (n+1) * segmentLength }, camera: {}, screen: {} },
+            p1: { world: { z:  n * segment_length }, camera: {}, screen: {} },
+            p2: { world: { z: (n+1) * segment_length }, camera: {}, screen: {} },
             curve: curve,
-            color: Math.floor(n/curb_length)%2 ? COLOURS.DARK : COLOURS.LIGHT
+            colour: Math.floor(n/curb_segments)%2 ? COLOURS.DARK : COLOURS.LIGHT
         });
     },
 
     add_road: function(enter, hold, leave, curve) {
         var n;
         for(n = 0 ; n < enter ; n++) {
-            add_segment(Misc.easeIn(0, curve, n/enter));
+            this.add_segment(Misc.easeIn(0, curve, n/enter));
         }
         for(n = 0 ; n < hold  ; n++) {
-            add_segment(curve);
+            this.add_segment(curve);
         }
         for(n = 0 ; n < leave ; n++) {
-            add_segment(Misc.easeInOut(curve, 0, n/leave));
+            this.add_segment(Misc.easeInOut(curve, 0, n/leave));
         }
     },
 
@@ -76,8 +77,8 @@ var ROAD = {
     },
 
     add_curve: function (num, curve) {
-        num    = num    || ROAD.LENGTH.MEDIUM;
-        curve  = curve  || ROAD.CURVE.MEDIUM;
+        num = num || ROAD.LENGTH.MEDIUM;
+        curve = curve || ROAD.CURVE.MEDIUM;
         this.add_road(num, num, num, curve);
     },
         
@@ -107,13 +108,15 @@ var player_x = 0;
 var player_z = null;
 var speed = 0;
 var position = 0;          // position of the player on the length of the track.
-var max_speed = segment_length/step; // TODO
+var max_speed = segment_length/step;
 var accel = max_speed / 5;
 var decel = -max_speed /10;
 var braking = -max_speed*0.8;
 var offroad_decel = -max_speed / 2;
 var offroad_limit = 0.3*max_speed;
+var centrifugal = 0.3;
 
+// determine key state
 var key_left = false;
 var key_right = false;
 var key_accel = false;
@@ -121,21 +124,23 @@ var key_decel = false;
 
 
 // MISC functions
-function project (p, camerax, cameray, cameraz, camera_depth, width, height, road_width) {
-    // takes a point and projects it on to the screen
-    p.camera.x     = (p.world.x || 0) - camerax;
-    p.camera.y     = (p.world.y || 0) - cameray;
-    p.camera.z     = (p.world.z || 0) - cameraz;
-    p.screen.scale = camera_depth/p.camera.z;
-    p.screen.x     = Math.round((width/2)  + (p.screen.scale * p.camera.x  * width/2));
-    p.screen.y     = Math.round((height/2) - (p.screen.scale * p.camera.y  * height/2));
-    p.screen.w     = Math.round(             (p.screen.scale * road_width   * width/2));
-}
-
 var Misc = {
     easeIn:    function(a,b,percent) { return a + (b-a)*Math.pow(percent,2);                           },
     easeOut:   function(a,b,percent) { return a + (b-a)*(1-Math.pow(1-percent,2));                     },
     easeInOut: function(a,b,percent) { return a + (b-a)*((-Math.cos(percent*Math.PI)/2) + 0.5);        },
+    percent_left: function(n, total) { return (n % total) / total; },
+
+    project: function (p, camerax, cameray, cameraz, camera_depth, width, height, road_width) {
+        // takes a point and projects it on to the screen
+        p.camera.x     = (p.world.x || 0) - camerax;
+        p.camera.y     = (p.world.y || 0) - cameray;
+        p.camera.z     = (p.world.z || 0) - cameraz;
+        p.screen.scale = camera_depth/p.camera.z;
+        p.screen.x     = Math.round((width/2)  + (p.screen.scale * p.camera.x  * width/2));
+        p.screen.y     = Math.round((height/2) - (p.screen.scale * p.camera.y  * height/2));
+        p.screen.w     = Math.round(             (p.screen.scale * road_width   * width/2));
+    },
+
 }
 
 // Now into the main bit
@@ -201,7 +206,11 @@ var Draw = {
         // renders the game out to the canvas.
         
         var player_segment = find_segment(position); // grabs the player pos, gets the segment from that.
+        var percent_left = Misc.percent_left(position, segment_length);
         var max_y = height;
+
+        var x  = 0;
+        var dx = - (player_segment.curve * percent_left);
 
         ctx.clearRect(0, 0, width, height);
 
@@ -211,8 +220,11 @@ var Draw = {
         for (i=0; i<draw_distance; i++) {
             segment = segments[(player_segment.index + i) % segments.length];
 
-            project(segment.p1, (player_x * road_width), camera_height, position, camera_depth, width, height, road_width);
-            project(segment.p2, (player_x * road_width), camera_height, position, camera_depth, width, height, road_width);
+            Misc.project(segment.p1, (player_x * road_width) - x, camera_height, position, camera_depth, width, height, road_width);
+            Misc.project(segment.p2, (player_x * road_width) - x - dx, camera_height, position, camera_depth, width, height, road_width);
+
+            x = x + dx;
+            dx = dx + segment.curve;
 
             if ((segment.p1.camera.z <= camera_depth) || (segment.p2.screen.y >= max_y)) 
                 continue;
@@ -236,25 +248,40 @@ function find_segment(z) {
 
 var Setup = {
 
-    create_straight_track: function () {
-        // defines a straight road.
+    create_straight_track: function() {
         segments = [];
-        for (var i=0; i< MAX_SEGMENTS; i++) {
-            segments.push({
-                index: i,
-                p1: { world: { z: i * segment_length}, camera:{}, screen: {} },
-                p2: { world: { z: (i+1)*segment_length}, camera:{}, screen:{} },
-                colour: Math.floor(i/curb_segments) % 2 ? COLOURS.DARK : COLOURS.LIGHT
-            });
+
+        ROAD.add_straight(ROAD.LENGTH.LONG*4);
+        Setup.start_finish();
+    },
+
+    create_bendy_track: function() {
+        segments = [];
+
+        ROAD.add_straight(ROAD.LENGTH.SHORT/4);
+        ROAD.add_scurves();
+        ROAD.add_straight(ROAD.LENGTH.LONG);
+        ROAD.add_curve(ROAD.LENGTH.MEDIUM, ROAD.CURVE.MEDIUM);
+        ROAD.add_curve(ROAD.LENGTH.LONG, ROAD.CURVE.MEDIUM);
+        ROAD.add_straight();
+        ROAD.add_scurves();
+        ROAD.add_scurves();
+        ROAD.add_curve(ROAD.LENGTH.LONG, -ROAD.CURVE.MEDIUM);
+        ROAD.add_curve(ROAD.LENGTH.LONG, ROAD.CURVE.MEDIUM);
+        ROAD.add_straight();
+        ROAD.add_scurves();
+        ROAD.add_curve(ROAD.LENGTH.LONG, -ROAD.CURVE.EASY);
+
+        Setup.start_finish();
+    },
+
+    start_finish: function() {
+        // this method just gets all the track positions etc in same spot.
+        segments[find_segment(player_z).index + 2].colour = COLOURS.START;
+        segments[find_segment(player_z).index + 3].colour = COLOURS.START;
+        for(var i = 0 ; i < curb_segments ; i++) {
+            segments[segments.length-1-(i + finish_offset)].colour = COLOURS.FINISH;
         }
-
-        segments[7].colour = COLOURS.START;
-        segments[8].colour = COLOURS.START;
-
-        for(var i = 0 ; i < curb_segments; i++) {
-            segments[segments.length-1-(i+finish_offset)].colour = COLOURS.FINISH;
-        }
-
         track_length = segments.length * segment_length;
     },
 
@@ -357,7 +384,12 @@ var Racer = {
     update: function(dt) {
         // this method updates the game world by the amount of time.
 
+        var speed_percent = speed / max_speed;
+        var player_segment = find_segment(position + player_z);
+        var dx = dt * 2 * (speed/max_speed); // factor left to right speed taking about 1 sec
+        
         position = position + (dt * speed);
+
         // check if we've finished the race.
         if (position > (track_length - (finish_offset * segment_length))) {
             console.log("Finished the race");
@@ -369,13 +401,13 @@ var Racer = {
             position = 0;
         }
 
-        var dx = dt * 2 * (speed/max_speed); // factor left to right speed taking about 1 sec
-
         if (key_left) {
             player_x = player_x - dx;
         } else if (key_right) {
             player_x = player_x + dx;
         }
+
+        player_x = player_x - (dx * speed_percent * player_segment.curve * centrifugal);
 
         if (key_accel) {
             speed = Physics.accelerate(speed, accel, dt);
