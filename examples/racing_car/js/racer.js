@@ -42,6 +42,54 @@ var KEY = {
 
 var PLAYER = { w: 80, h: 50, colour: "#ffffff" };
 
+// defines everything around the road geometry
+var ROAD = {
+    LENGTH: { NONE: 0, SHORT:  25, MEDIUM:  50, LONG:  100 }, // num segments
+    CURVE:  { NONE: 0, EASY:    2, MEDIUM:   4, HARD:    6 },
+    add_segment: function (curve) {
+        var n = segments.length;
+        segments.push({
+            index: n,
+            p1: { world: { z:  n * segmentLength }, camera: {}, screen: {} },
+            p2: { world: { z: (n+1) * segmentLength }, camera: {}, screen: {} },
+            curve: curve,
+            color: Math.floor(n/curb_length)%2 ? COLOURS.DARK : COLOURS.LIGHT
+        });
+    },
+
+    add_road: function(enter, hold, leave, curve) {
+        var n;
+        for(n = 0 ; n < enter ; n++) {
+            add_segment(Misc.easeIn(0, curve, n/enter));
+        }
+        for(n = 0 ; n < hold  ; n++) {
+            add_segment(curve);
+        }
+        for(n = 0 ; n < leave ; n++) {
+            add_segment(Misc.easeInOut(curve, 0, n/leave));
+        }
+    },
+
+    add_straight: function (num) {
+        num = num || ROAD.LENGTH.MEDIUM;
+        this.add_road(num, num, num, 0);
+    },
+
+    add_curve: function (num, curve) {
+        num    = num    || ROAD.LENGTH.MEDIUM;
+        curve  = curve  || ROAD.CURVE.MEDIUM;
+        this.add_road(num, num, num, curve);
+    },
+        
+    add_scurves: function () {
+        this.add_road(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.EASY);
+        this.add_road(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,   ROAD.CURVE.MEDIUM);
+        this.add_road(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,   ROAD.CURVE.EASY);
+        this.add_road(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.EASY);
+        this.add_road(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.MEDIUM);
+    }
+};
+
 // segment set up
 var segments = [];          // array of all the road segments in the level.
 var road_width = 2000; 
@@ -71,6 +119,8 @@ var key_right = false;
 var key_accel = false;
 var key_decel = false;
 
+
+// MISC functions
 function project (p, camerax, cameray, cameraz, camera_depth, width, height, road_width) {
     // takes a point and projects it on to the screen
     p.camera.x     = (p.world.x || 0) - camerax;
@@ -82,6 +132,13 @@ function project (p, camerax, cameray, cameraz, camera_depth, width, height, roa
     p.screen.w     = Math.round(             (p.screen.scale * road_width   * width/2));
 }
 
+var Misc = {
+    easeIn:    function(a,b,percent) { return a + (b-a)*Math.pow(percent,2);                           },
+    easeOut:   function(a,b,percent) { return a + (b-a)*(1-Math.pow(1-percent,2));                     },
+    easeInOut: function(a,b,percent) { return a + (b-a)*((-Math.cos(percent*Math.PI)/2) + 0.5);        },
+}
+
+// Now into the main bit
 var Draw = {
 
     segment_poly: function (ctx, x1, y1, x2, y2, x3, y3, x4, y4, colour) {
@@ -138,8 +195,38 @@ var Draw = {
 
         // TODO Actually draw the car...
         ctx.fillRect(x, y, w , h);
-    }
+    },
 
+    frame: function () {
+        // renders the game out to the canvas.
+        
+        var player_segment = find_segment(position); // grabs the player pos, gets the segment from that.
+        var max_y = height;
+
+        ctx.clearRect(0, 0, width, height);
+
+        Draw.background();
+
+        var i, segment;
+        for (i=0; i<draw_distance; i++) {
+            segment = segments[(player_segment.index + i) % segments.length];
+
+            project(segment.p1, (player_x * road_width), camera_height, position, camera_depth, width, height, road_width);
+            project(segment.p2, (player_x * road_width), camera_height, position, camera_depth, width, height, road_width);
+
+            if ((segment.p1.camera.z <= camera_depth) || (segment.p2.screen.y >= max_y)) 
+                continue;
+            Draw.segment(ctx, segment);
+
+            max_y = segment.p2.screen.y;
+        }
+
+        Draw.player();
+
+        $("#speed").text("Speed: " + speed);
+        $("#maxspeed").text("Max: " + max_speed);
+        $("#offlimit").text("Off: " + offroad_limit);
+    },
 }
 
 function find_segment(z) {
@@ -147,154 +234,89 @@ function find_segment(z) {
     return segments[Math.floor(z/segment_length) % segments.length];
 }
 
-function setup_road () {
-    segments = [];
-    for (var i=0; i< MAX_SEGMENTS; i++) {
-        segments.push({
-            index: i,
-            p1: { world: { z: i * segment_length}, camera:{}, screen: {} },
-            p2: { world: { z: (i+1)*segment_length}, camera:{}, screen:{} },
-            colour: Math.floor(i/curb_segments) % 2 ? COLOURS.DARK : COLOURS.LIGHT
+var Setup = {
+
+    create_straight_track: function () {
+        // defines a straight road.
+        segments = [];
+        for (var i=0; i< MAX_SEGMENTS; i++) {
+            segments.push({
+                index: i,
+                p1: { world: { z: i * segment_length}, camera:{}, screen: {} },
+                p2: { world: { z: (i+1)*segment_length}, camera:{}, screen:{} },
+                colour: Math.floor(i/curb_segments) % 2 ? COLOURS.DARK : COLOURS.LIGHT
+            });
+        }
+
+        segments[7].colour = COLOURS.START;
+        segments[8].colour = COLOURS.START;
+
+        for(var i = 0 ; i < curb_segments; i++) {
+            segments[segments.length-1-(i+finish_offset)].colour = COLOURS.FINISH;
+        }
+
+        track_length = segments.length * segment_length;
+    },
+
+    setup_listeners: function() {
+        // sets up the key bindings.
+        
+        document.addEventListener("keydown", function(event) {
+            switch (event.keyCode) {
+                case KEY.LEFT:
+                    key_left = true;
+                    break;
+                case KEY.RIGHT:
+                    key_right = true;
+                    break;
+                case KEY.UP:
+                    key_accel = true;
+                    break;
+                case KEY.DOWN:
+                    key_decel = true;
+                    break;
+            }
         });
-    }
 
-    segments[7].colour = COLOURS.START;
-    segments[8].colour = COLOURS.START;
+        document.addEventListener("keyup", function(event) {
+            switch (event.keyCode) {
+                case KEY.LEFT:
+                    key_left = false;
+                    break;
+                case KEY.RIGHT:
+                    key_right = false;
+                    break;
+                case KEY.UP:
+                    key_accel = false;
+                    break;
+                case KEY.DOWN:
+                    key_decel = false;
+                    break;
+            }
+        });
+    },
 
-    for(var i = 0 ; i < curb_segments; i++) {
-        segments[segments.length-1-(i+finish_offset)].colour = COLOURS.FINISH;
-    }
+    init: function() {
+        // hooks everything together.
 
-    track_length = segments.length * segment_length;
+        canvas = document.getElementById("canv");
+        ctx = canvas.getContext("2d");
+        canvas.width = width;
+        canvas.height = height;
+
+        this.setup_listeners();
+
+        player_z = (camera_height * camera_depth);
+        player_z_scale = (camera_depth / player_z);
+
+    },
 }
 
-function setup_listeners() {
-    // sets up the key bindings.
-    
-    document.addEventListener("keydown", function(event) {
-        switch (event.keyCode) {
-            case KEY.LEFT:
-                key_left = true;
-                break;
-            case KEY.RIGHT:
-                key_right = true;
-                break;
-            case KEY.UP:
-                key_accel = true;
-                break;
-            case KEY.DOWN:
-                key_decel = true;
-                break;
-        }
-    });
-
-    document.addEventListener("keyup", function(event) {
-        switch (event.keyCode) {
-            case KEY.LEFT:
-                key_left = false;
-                break;
-            case KEY.RIGHT:
-                key_right = false;
-                break;
-            case KEY.UP:
-                key_accel = false;
-                break;
-            case KEY.DOWN:
-                key_decel = false;
-                break;
-        }
-    });
-
-}
-
-function setup() {
-    
-    canvas = document.getElementById("canv");
-    ctx = canvas.getContext("2d");
-    canvas.width = width;
-    canvas.height = height;
-
-    setup_listeners();
-
-    player_z = (camera_height * camera_depth);
-    player_z_scale = (camera_depth / player_z);
-
-}
-
-function draw_frame() {
-    // renders the game out to the canvas.
-    
-    var player_segment = find_segment(position); // grabs the player pos, gets the segment from that.
-    var max_y = height;
-
-    ctx.clearRect(0, 0, width, height);
-
-    Draw.background();
-
-    var i, segment;
-    for (i=0; i<draw_distance; i++) {
-        segment = segments[(player_segment.index + i) % segments.length];
-
-        project(segment.p1, (player_x * road_width), camera_height, position, camera_depth, width, height, road_width);
-        project(segment.p2, (player_x * road_width), camera_height, position, camera_depth, width, height, road_width);
-
-        if ((segment.p1.camera.z <= camera_depth) || (segment.p2.screen.y >= max_y)) 
-            continue;
-        Draw.segment(ctx, segment);
-
-        max_y = segment.p2.screen.y;
-
-    }
-
-    Draw.player();
-
-    $("#speed").text("Speed: " + speed);
-    $("#maxspeed").text("Max: " + max_speed);
-    $("#offlimit").text("Off: " + offroad_limit);
-}
-
-function update(dt) {
-
-    position = position + (dt * speed);
-    if (position > (track_length - (finish_offset * segment_length))) {
-        console.log("Finished the race");
-        position = track_length - (finish_offset * segment_length);
-        key_accel = false;
-        speed = 0;
-    }
-    if (position < 0) {
-        position = 0;
-    }
-
-    var dx = dt * 2 * (speed/max_speed); // factor left to right speed taking about 1 sec
-
-    if (key_left)
-        player_x = player_x - dx;
-    else if (key_right)
-        player_x = player_x + dx;
-
-    if (key_accel)
-        speed = Physics.accelerate(speed, accel, dt);
-    else if (key_decel)
-        speed = Physics.accelerate(speed, braking, dt);
-    else
-        speed = Physics.accelerate(speed, decel, dt);
-
-    if (((player_x < -1) || (player_x > 1)) && (speed > offroad_limit)) {
-        console.log("OFFROAD");
-        speed = Physics.accelerate(speed, offroad_decel, dt);
-    }
-
-    player_x = Physics.limit(player_x, -2, 2);     // dont ever let player go too far out of bounds
-    speed   = Physics.limit(speed, 0, max_speed); // or exceed maxSpeed
-
-}
 
 // physics components
 var Physics = {
 
     accelerate: function(speed, accel, time) { 
-        //console.log("Accelerating");
         return (speed + (accel * time)); 
     },
 
@@ -321,16 +343,54 @@ var Racer = {
             // this updates at the right frame speed/ 
             while (gdt > step) {
                 gdt = gdt - step;
-                update (step);
+                Racer.update (step);
             }
-            draw_frame();
+            Draw.frame();
             last = now;
             requestAnimationFrame(frame, canvas);
         }
 
         // go speed racer go.
         frame();
-
     },
 
+    update: function(dt) {
+        // this method updates the game world by the amount of time.
+
+        position = position + (dt * speed);
+        // check if we've finished the race.
+        if (position > (track_length - (finish_offset * segment_length))) {
+            console.log("Finished the race");
+            position = track_length - (finish_offset * segment_length);
+            key_accel = false;
+            speed = 0;
+        }
+        if (position < 0) {
+            position = 0;
+        }
+
+        var dx = dt * 2 * (speed/max_speed); // factor left to right speed taking about 1 sec
+
+        if (key_left) {
+            player_x = player_x - dx;
+        } else if (key_right) {
+            player_x = player_x + dx;
+        }
+
+        if (key_accel) {
+            speed = Physics.accelerate(speed, accel, dt);
+        } else if (key_decel) {
+            speed = Physics.accelerate(speed, braking, dt);
+        } else {
+            speed = Physics.accelerate(speed, decel, dt);
+        }
+
+        if (((player_x < -1) || (player_x > 1)) && (speed > offroad_limit)) {
+            console.log("OFFROAD");
+            speed = Physics.accelerate(speed, offroad_decel, dt);
+        }
+
+        player_x = Physics.limit(player_x, -2, 2);     // dont ever let player go too far out of bounds
+        speed   = Physics.limit(speed, 0, max_speed); // or exceed maxSpeed
+    },
 }
