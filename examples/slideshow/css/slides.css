@@ -1,0 +1,29 @@
+body {
+    font-family: helvetica, arial, sans serif;
+}
+
+div#images {
+    display: inline-block;
+    border: 10px solid rgb(254,188,111);
+    max-width: 612px;
+}
+
+
+div#images img {
+    width: 100%;
+} 
+
+@media all and (max-width: 480px) {
+    div#images {
+        max-width: 90%;
+        border: 10px solid rgb(234,168,111);
+    }
+}
+
+@media all and (min-width: 481px) and (max-width: 768px) {
+
+    div#images {
+        max-width: 90%;
+        border: 10px solid rgb(214,148,111);
+    }
+}

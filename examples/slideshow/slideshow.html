@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Lazy Slideshow</title>
+    <link rel="stylesheet" href="css/slides.css">
+
+</head>
+<body>
+    <div id="main">
+        <h1>Lazy Slideshow</h1>
+
+        <div id="images" class="cycle-slideshow" 
+            data-cycle-loader=wait
+            data-cycle-fx=scrollHorz 
+            data-cycle-timeout=0
+            data-cycle-prev="#prev" data-cycle-next="#next" >
+
+            <img src="images/1.jpg">
+            <img src="images/2.jpg">
+            <img src="images/3.jpg">
+            <img src="images/4.jpg">
+            <img src="images/5.jpg">
+        </div>
+       <div>
+            <a href=# id="prev">Previous</a>
+            <a href=# id="next">Next</a>
+        </div>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.cycle2.js"></script>
+    <script src="js/deviceapi-normaliser.js"></script>
+    <script src="js/slideshow.js"></script>
+</body>
+
+
