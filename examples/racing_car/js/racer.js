@@ -287,7 +287,9 @@ var Setup = {
 
     setup_listeners: function() {
         // sets up the key bindings.
-        
+
+        document.addEventListener("click", click_orientation);
+
         document.addEventListener("keydown", function(event) {
             switch (event.keyCode) {
                 case KEY.LEFT:
@@ -426,3 +428,101 @@ var Racer = {
         speed   = Physics.limit(speed, 0, max_speed); // or exceed maxSpeed
     },
 }
+
+// THIS SECTION DEFINES THE CONTROL HANDLER FOR THE GYRO
+var current_orientation = null; // stores the values
+var orientation_running = false; // switch orientation on or off to save batt
+var sample_rate = 1000 / fps;
+
+var click_orientation = function() {
+    // deals with toggling the motion detection on and off.
+    if (orientation_running) {
+        window.removeEventListener("deviceorientation", update_gyro);
+        orientation_running = false;
+        $("#orientationtoggle span").text("Start");
+        window.clearInterval(tracker_interval);
+    } else {
+        window.addEventListener("deviceorientation", update_gyro, false);
+        orientation_running = true;
+        $("#orientationtoggle span").text("Stop");
+        tracker_interval = window.setInterval(orientation_tracker, sample_rate);
+    }
+}
+
+var update_gyro = function(e) {
+    // simply updates the orientation value with the event data so there's no lag.
+    current_orientation = deviceOrientation(e);
+}
+
+var orientation_tracker = function() {
+    // gets the current orientation values.
+    var debug = false;
+
+    if (debug) {
+        $("#beta").text(current_orientation.beta);
+        $("#gamma").text(current_orientation.gamma);
+    }
+    beta = current_orientation.beta;
+    gamma = current_orientation.gamma;
+
+    // so we assume that when the device is on its side that gamma is for 
+    // acceleration and beta is for steering
+
+    // let's assume a comfortable "neutral" position for gamma is about 45 deg
+    // and this is absolute = so + - doesn't matter. > 45 means breeaking, <45
+    // means accelerating. And we'll put some break points in there too.
+    
+    if (Math.abs(gamma) > 60) {
+        // pulling back to break
+        key_accel = false;
+        key_decel = true;
+        if (debug) {
+            $("#status").text("breaking");
+        }
+    } else if (Math.abs(gamma) < 40) {
+        // pushing forward to accelerate
+        key_accel = true;
+        key_decel = false;
+        if (debug) {
+            $("#status").text("accelerating");
+        }
+    } else {
+        // assume neutral
+        key_accel = false;
+        key_decel = false;
+        if (debug) {
+            $("#status").text("neutral");
+        }
+    }
+
+    // now we do the steering. This can invert depending on the gamma. 
+    // So if gamma is positive then steering to the right (clockwise) will
+    // have a -ive value for beta. If gamma is -ive then this will reverse.
+
+    var gamma_correction = -1; // assumes a +ive gamma
+    if (gamma < 0) {
+        gamma_correction = 1;
+    }
+
+    beta_corrected = beta * gamma_correction;
+
+    //TODO: Possibly change this to variable steering
+
+    if (beta_corrected < -12) {
+        // we're steering left
+        key_left = true;
+        key_right = false;
+    } else if (beta_corrected > 12) {
+        // we're going right
+        key_left = false;
+        key_right = true;
+    } else {
+        // neutral
+        key_left = false;
+        key_right = false;
+    }
+
+}
+
+
+
