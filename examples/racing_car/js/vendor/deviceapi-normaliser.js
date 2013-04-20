@@ -1,0 +1,1 @@
+/home/fishera/dev/deviceapi-normaliser/deviceapi-normaliser.js
