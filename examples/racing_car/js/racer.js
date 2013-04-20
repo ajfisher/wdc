@@ -110,6 +110,7 @@ var speed = 0;
 var position = 0;          // position of the player on the length of the track.
 var max_speed = segment_length/step;
 var accel = max_speed / 5;
+//TODO: Add banding of acceleration
 var decel = -max_speed /10;
 var braking = -max_speed*0.8;
 var offroad_decel = -max_speed / 2;
@@ -389,6 +390,7 @@ var Racer = {
         var speed_percent = speed / max_speed;
         var player_segment = find_segment(position + player_z);
         var dx = dt * 2 * (speed/max_speed); // factor left to right speed taking about 1 sec
+        // TODO: modify DX based on tilt factor
         
         position = position + (dt * speed);
 
@@ -413,6 +415,7 @@ var Racer = {
 
         if (key_accel) {
             speed = Physics.accelerate(speed, accel, dt);
+            // TODO: modify speed by tilt factor
         } else if (key_decel) {
             speed = Physics.accelerate(speed, braking, dt);
         } else {

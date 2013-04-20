@@ -18,7 +18,9 @@ div#message {
     /**display: none;**/
 }
 
-
+div#orientdata {
+    display: none;
+}
 @media all and (orientation: landscape) {
     div#message {
         display: none;
