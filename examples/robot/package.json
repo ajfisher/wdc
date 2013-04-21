@@ -1,0 +1,13 @@
+{
+    "name": "interactiverobot",
+    "version": "0.1.0",
+    "description": "Socket Controlled Arduino Robot",
+    "author": "Andrew Fisher (github.com/ajfisher)",
+    "dependencies": {
+        "socket.io": "0.9.x",
+        "serialport": "1.1.x"
+    },
+    "engines": {
+        "node": " >= 0.8.22"
+    }
+}
