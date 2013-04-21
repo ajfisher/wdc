@@ -30,7 +30,7 @@ function stop () {
 
 $(document).ready(function() {
     console.log("Initialising motion stuff");
-    mo.init();
+    //mo.init();
 
     // do the even binding
     $("#fwd").bind("click", fwd);
