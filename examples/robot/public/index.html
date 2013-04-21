@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <!-- user interface for an arduino controlled 4wd robotics platform -->
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Robot Control</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/robot.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <div id="message">Please turn your screen to landscape view</div>
+        <div id="connection" class="waiting">Awaiting connection</div>
+
+        <div id="controls">
+            <p>
+                <a href="#" id="fwd">FWD</a><br>
+                <a href="#" id="left">LEFT</a> | 
+                <a href="#" id="right">RIGHT</a><br>
+                <a href="#" id="rev">REV</a><br>
+                <a href="#" id="stop">STOP</a>
+            </p>
+        </div>
+
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+        <script src="/socket.io/socket.io.js"></script>            
+        <script src="js/vendor/deviceapi-normaliser.js"></script>
+        <script src="js/robot.js"></script>
+    </body>
+</html>
