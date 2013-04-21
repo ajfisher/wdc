@@ -14,8 +14,8 @@ if (!window.requestAnimationFrame) { // http://paulirish.com/2011/requestanimati
 // speed etc...
 var fps = 60;
 var step = 1/fps; // how often to attempt to get a new frame.
-var width = 800;
-var height = 500;
+var width = 1000;//$(window).width() * 0.8;//1000;
+var height = 600; //$(window).height() * 0.8; //600;
 var canvas = null;
 var ctx = null;
 
@@ -26,13 +26,15 @@ var player_z_scale = null;
 
 // constants
 var COLOURS = {
-  SKY:  'cyan',
-  LIGHT:  { road: '#6B6B6B', grass: '#10AA10', curb: 'white' },
-  DARK:   { road: '#696969', grass: '#009A00', curb: 'red' },
-  START:  { road: 'white',   grass: '#10AA10',   curb: 'white' },
-  FINISH: { road: 'black',   grass: '#009A00',   curb: 'black' }
+  SKY:  '#38B0DE',
+  LIGHT:  { road: '#6B6B6B', grass: '#4DBD33', curb: '#E2DDB5' },
+  DARK:   { road: '#606060', grass: '#60A234', curb: '#E04006' },
+  START:  { road: 'white',   grass: '#4DBD33',   curb: 'white' },
+  FINISH: { road: 'black',   grass: '#308014',   curb: 'black' }
 };
 
+// 308014
+// 3DAD33
 var KEY = {
   LEFT:  37,
   UP:    38,
@@ -110,7 +112,6 @@ var speed = 0;
 var position = 0;          // position of the player on the length of the track.
 var max_speed = segment_length/step;
 var accel = max_speed / 5;
-//TODO: Add banding of acceleration
 var decel = -max_speed /10;
 var braking = -max_speed*0.8;
 var offroad_decel = -max_speed / 2;
@@ -122,6 +123,16 @@ var key_left = false;
 var key_right = false;
 var key_accel = false;
 var key_decel = false;
+
+// determine pressure state for acceleration and steering.
+// this is only relevant for orientation capable devices
+// set to NORMAL to begin with and this can only be overridden by
+// orientation capable devices then.
+var steering_pressure = { LIGHT: 0.5, NORMAL: 1.0, HARD: 2.0 };
+var steering_state = steering_pressure.NORMAL;
+
+var accel_pressure = {LIGHT: 0.3, NORMAL: 1.0, HARD: 2.0};
+var accel_state = accel_pressure.NORMAL;
 
 
 // MISC functions
@@ -203,6 +214,17 @@ var Draw = {
         ctx.fillRect(x, y, w , h);
     },
 
+
+    hud: function() {
+        // draws any required HUD elements to the screen.
+
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 16px sans-serif";
+        ctx.textAlight = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText("Speed: " + (Math.round(speed/100*1.5)) + " km/h", 10, 10);
+    },
+
     frame: function () {
         // renders the game out to the canvas.
         
@@ -235,10 +257,7 @@ var Draw = {
         }
 
         Draw.player();
-
-        $("#speed").text("Speed: " + speed);
-        $("#maxspeed").text("Max: " + max_speed);
-        $("#offlimit").text("Off: " + offroad_limit);
+        Draw.hud();
     },
 }
 
@@ -289,7 +308,7 @@ var Setup = {
     setup_listeners: function() {
         // sets up the key bindings.
 
-        document.addEventListener("click", click_orientation);
+        document.getElementById("start").addEventListener("click", click_orientation);
 
         document.addEventListener("keydown", function(event) {
             switch (event.keyCode) {
@@ -327,10 +346,12 @@ var Setup = {
     },
 
     init: function() {
-        // hooks everything together.
+        // gets everything started up.
 
         canvas = document.getElementById("canv");
         ctx = canvas.getContext("2d");
+        width = $(window).width() * 0.8;
+        height = $(window).height() * 0.8;
         canvas.width = width;
         canvas.height = height;
 
@@ -338,7 +359,6 @@ var Setup = {
 
         player_z = (camera_height * camera_depth);
         player_z_scale = (camera_depth / player_z);
-
     },
 }
 
@@ -390,8 +410,10 @@ var Racer = {
         var speed_percent = speed / max_speed;
         var player_segment = find_segment(position + player_z);
         var dx = dt * 2 * (speed/max_speed); // factor left to right speed taking about 1 sec
-        // TODO: modify DX based on tilt factor
         
+        // modify the amount of movement by the steering state
+        dx = dx * steering_state;
+
         position = position + (dt * speed);
 
         // check if we've finished the race.
@@ -414,8 +436,8 @@ var Racer = {
         player_x = player_x - (dx * speed_percent * player_segment.curve * centrifugal);
 
         if (key_accel) {
-            speed = Physics.accelerate(speed, accel, dt);
-            // TODO: modify speed by tilt factor
+            var tmp_accel = accel * accel_state; // modify acceleration by state - used for orientation sensor
+            speed = Physics.accelerate(speed, tmp_accel, dt);
         } else if (key_decel) {
             speed = Physics.accelerate(speed, braking, dt);
         } else {
@@ -442,29 +464,24 @@ var click_orientation = function() {
     if (orientation_running) {
         window.removeEventListener("deviceorientation", update_gyro);
         orientation_running = false;
-        $("#orientationtoggle span").text("Start");
         window.clearInterval(tracker_interval);
     } else {
         window.addEventListener("deviceorientation", update_gyro, false);
         orientation_running = true;
-        $("#orientationtoggle span").text("Stop");
         tracker_interval = window.setInterval(orientation_tracker, sample_rate);
+        $("#start").hide()
     }
 }
 
 var update_gyro = function(e) {
     // simply updates the orientation value with the event data so there's no lag.
-    current_orientation = deviceOrientation(e);
+    current_orientation = e; // no need to use normaliser.//deviceOrientation(e);
 }
 
 var orientation_tracker = function() {
-    // gets the current orientation values.
-    var debug = false;
+    // gets the current orientation values
+    if (current_orientation.gamma === null) { return; }
 
-    if (debug) {
-        $("#beta").text(current_orientation.beta);
-        $("#gamma").text(current_orientation.gamma);
-    }
     beta = current_orientation.beta;
     gamma = current_orientation.gamma;
 
@@ -474,28 +491,28 @@ var orientation_tracker = function() {
     // let's assume a comfortable "neutral" position for gamma is about 45 deg
     // and this is absolute = so + - doesn't matter. > 45 means breeaking, <45
     // means accelerating. And we'll put some break points in there too.
-    
-    if (Math.abs(gamma) > 60) {
+    var gamma_abs = Math.abs(gamma); // so we don't keep calulating it
+    if (gamma_abs > 60) {
         // pulling back to break
         key_accel = false;
         key_decel = true;
-        if (debug) {
-            $("#status").text("breaking");
-        }
-    } else if (Math.abs(gamma) < 40) {
+    } else if (gamma_abs < 50) {
         // pushing forward to accelerate
         key_accel = true;
         key_decel = false;
-        if (debug) {
-            $("#status").text("accelerating");
+        // now we determine the extent.
+
+        if (gamma_abs > 45) {
+            accel_state = accel_pressure.LIGHT;
+        } else if (gamma_abs > 35) {
+            accel_state = accel_pressure.NORMAL;
+        } else {
+            accel_state = accel_pressure.HARD;
         }
     } else {
         // assume neutral
         key_accel = false;
         key_decel = false;
-        if (debug) {
-            $("#status").text("neutral");
-        }
     }
 
     // now we do the steering. This can invert depending on the gamma. 
@@ -509,13 +526,11 @@ var orientation_tracker = function() {
 
     beta_corrected = beta * gamma_correction;
 
-    //TODO: Possibly change this to variable steering
-
-    if (beta_corrected < -12) {
+    if (beta_corrected < -5) {
         // we're steering left
         key_left = true;
         key_right = false;
-    } else if (beta_corrected > 12) {
+    } else if (beta_corrected > 5) {
         // we're going right
         key_left = false;
         key_right = true;
@@ -524,7 +539,17 @@ var orientation_tracker = function() {
         key_left = false;
         key_right = false;
     }
-
+    // now we just determine the steering coefficient
+    if (key_left || key_right) {
+        var beta_abs = Math.abs(beta); // so we don't keep calculating it
+        if (beta_abs < 12) {
+            steering_state = steering_pressure.LIGHT;
+        } else if (beta_abs < 22) {
+            steering_state = steering_pressure.NORMAL;
+        } else {
+            steering_state = steering_pressure.HARD;
+        }
+    }
 }
 
 

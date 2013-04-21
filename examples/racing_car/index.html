@@ -5,7 +5,7 @@
         http://www.extentofthejam.com/pseudo/#basics and
         http://codeincomplete.com/posts/2012/6/23/javascript_racer_v1_straight/
 
-        for the bit's I'd forgotten about -->
+        for the bit's I'd forgotten about after years of not doing this -->
 
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -24,22 +24,17 @@
     </head>
     <body>
         <div id="message">Please turn your screen to landscape view</div>
-        <p><a href=# id="orientationtoggle"><span>Start</span> gyro tracking</a></p>
-        <div id="orientdata">
-            <p>status: <span id="status"></span></p>
-            <p>beta: <span id="beta"></span></p>
-            <p>gamma: <span id="gamma"></span></p>
-        </div>
         <div id="game">
             <canvas id="canv"></canvas>
-            <section id="speed"></section>
-            <section id="maxspeed"></section>
-            <section id="offlimit"></section>
+            <div id="start"><p>Start</p></div>
         </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
         <script src="js/vendor/deviceapi-normaliser.js"></script>
         <script>
+            window.onorientationchange = (function() {
+                document.location.reload();
+            });
             mo.init(); // get the device API stuff sorted.
             Setup.init();
             Setup.create_bendy_track();
