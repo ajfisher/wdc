@@ -47,7 +47,15 @@ $(document).ready(function() {
         // we are connected
         console.log("Connected");
         $("#connection").removeClass("waiting");
+        $("#connection").removeClass("disconnected");
         $("#connection").addClass("connected");
         $("#connection").text("Robot online...");
+    });
+    socket.on("disconnect", function() {
+        // disconnected
+        console.log("Disconnected");
+        $("#connection").removeClass("connected");
+        $("#connection").addClass("disconnected");
+        $("#connection").text("Robot disconnected");
     });
 });

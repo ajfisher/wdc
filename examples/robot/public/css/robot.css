@@ -35,6 +35,10 @@ div.connected {
     background-color: rgb(100,200,100);
 }
 
+div.disconnected {
+    background-color: rgb(200, 50, 50);
+}
+
 div#controls {
     text-align: center;
 }

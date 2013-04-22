@@ -31,28 +31,54 @@ io.sockets.on("connection", function(socket) {
     socket.emit("connect_ack", {msg: "Welcome Control"});
 
     socket.on("control", function(data) {
+        // control messages send two bytes followed by \n to the arduino
+        // Byte 0: 0-255: speed with 128 being 0, >128 is forward and <128 backwards
+        // Byte 1: 0-255: direction with 128 being 0, >128 turns right and < 128 turns left
+        //
+        // for testing we use 0-127 with 64 being the flip over point.
         console.log(data);
+        var serstring = "";
         if (data.fwd) {
             console.log("Going forward");
-            ser.write("Z@\n");
+
+            serstring = serstring + String.fromCharCode(96);
+            //serstring = "Z@";
         }
         if (data.stop) {
             console.log("STOP!!");
-            ser.write("@@\n");
+            serstring = serstring + String.fromCharCode(64);
+            //serstring = "@@";
         }
         if (data.rev) {
             console.log("Going backwards");
-            ser.write(" @\n");
+            serstring = serstring + String.fromCharCode(32);
+            //serstring = " @";
         }
+        
+        serstring = serstring + String.fromCharCode(64) + "\n";
+
+        console.log(serstring);
+
+        ser.write(serstring);
     });
+
+    socket.on("disconnect", function() {
+        console.log("User has been disconnected");
+    });
+
 
 });
 
 
 // set up the serial connection
-var ser = new SerialPort("/dev/ttyUSB0");
+var ser = new SerialPort("/dev/ttyUSB0"); // TODO fix this to work properly.
+
 ser.on("open", function() {
     console.log("Serial Port is ready for business");
+});
+
+ser.on("error", function(err) {
+        console.log("Couldn't open the USB port");
 });
 
 
