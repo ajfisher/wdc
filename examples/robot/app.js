@@ -37,25 +37,36 @@ io.sockets.on("connection", function(socket) {
         //
         // for testing we use 0-127 with 64 being the flip over point.
         console.log(data);
+        var base = 64;
+        var change = 32;
         var serstring = "";
         if (data.fwd) {
             console.log("Going forward");
 
-            serstring = serstring + String.fromCharCode(96);
+            serstring = serstring + String.fromCharCode(base+change) + String.fromCharCode(base);
             //serstring = "Z@";
         }
         if (data.stop) {
             console.log("STOP!!");
-            serstring = serstring + String.fromCharCode(64);
+            serstring = serstring + String.fromCharCode(base) + String.fromCharCode(base);
             //serstring = "@@";
         }
         if (data.rev) {
             console.log("Going backwards");
-            serstring = serstring + String.fromCharCode(32);
+            serstring = serstring + String.fromCharCode(base-change) + String.fromCharCode(base);
             //serstring = " @";
         }
+
+        if (data.left) {
+            console.log("going left");
+            serstring = serstring + String.fromCharCode(base+change) + String.fromCharCode(base-change);
+        }
+        if (data.right) {
+            console.log("going right");
+            serstring = serstring + String.fromCharCode(base+change) + String.fromCharCode(base+change);
+        }
         
-        serstring = serstring + String.fromCharCode(64) + "\n";
+        serstring = serstring + "\n";
 
         console.log(serstring);
 
