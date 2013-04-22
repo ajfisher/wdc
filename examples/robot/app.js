@@ -59,11 +59,11 @@ io.sockets.on("connection", function(socket) {
 
         if (data.left) {
             console.log("going left");
-            serstring = serstring + String.fromCharCode(base+change) + String.fromCharCode(base-change);
+            serstring = serstring + String.fromCharCode(base+change) + String.fromCharCode(base-base);
         }
         if (data.right) {
             console.log("going right");
-            serstring = serstring + String.fromCharCode(base+change) + String.fromCharCode(base+change);
+            serstring = serstring + String.fromCharCode(base+change) + String.fromCharCode(base+base);
         }
         
         serstring = serstring + "\n";
