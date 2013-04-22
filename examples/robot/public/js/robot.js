@@ -42,7 +42,7 @@ $(document).ready(function() {
     // set up the web sockets stuff.
     console.log("Setting up websockets");
    
-    socket = io.connect("http://localhost");
+    socket = io.connect(location.host);
     socket.on('connect_ack', function(data) {
         // we are connected
         console.log("Connected");
