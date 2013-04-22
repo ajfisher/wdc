@@ -41,7 +41,19 @@ div.disconnected {
 
 div#controls {
     text-align: center;
+
 }
+
+div#control p {
+    margin: 2px;
+}
+
+div#controls p a {
+    color: #fff;
+    background: #c0c0c0;
+    padding: 10px;
+}
+
 
 @media all and (orientation: landscape) {
     div#message {
