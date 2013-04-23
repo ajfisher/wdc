@@ -1,30 +1,37 @@
 var socket; // used for everything.
 
+var change = 32;
+
+function drive(velocity, turnamt) {
+    socket.emit('control', {vel: velocity, turn: turnamt});
+} 
+
 function fwd () {
     // sends a forward command
     console.log("Sending fwd");
-    socket.emit('control', {fwd: 1});
+    drive(change, 0);
+//    socket.emit('control', {vel: change, turn: 0});
 }
 
 function rev () {
     // sends a forward command
     console.log("Sending rev");
-    socket.emit('control', {rev: 1});
+    socket.emit('control', {vel: (-1*change), turn: 0});
 }
 function left () {
     // sends a forward command
     console.log("Sending left");
-    socket.emit('control', {left: 1});
+    socket.emit('control', {vel: 0, turn: (-1*change)});
 }
 function right () {
     // sends a forward command
     console.log("Sending right");
-    socket.emit('control', {right: 1});
+    socket.emit('control', {vel: 0, turn: change});
 }
 function stop () {
     // sends a forward command
     console.log("Sending stop");
-    socket.emit('control', {stop: true});
+    socket.emit('control', {vel: 0, turn: 0});
 }
 
 
@@ -33,11 +40,15 @@ $(document).ready(function() {
     //mo.init();
 
     // do the even binding
-    $("#fwd").bind("click", fwd);
-    $("#rev").bind("click", rev);
-    $("#left").bind("click", left);
-    $("#right").bind("click", right);
-    $("#stop").bind("click", stop);
+    $("#fwd").bind("click", function() { drive(change, 0)});
+    $("#rev").bind("click", function() { drive(-change, 0)});
+    $("#left").bind("click", function() { drive(0, change)});
+    $("#fwdleft").bind("click", function() { drive(change, change)});
+    $("#revleft").bind("click", function() { drive(-change, change)});
+    $("#right").bind("click", function() { drive(0, -change)});
+    $("#fwdright").bind("click", function() { drive(change, -change)});
+    $("#revright").bind("click", function() { drive(-change, -change)});
+    $("#stop").bind("click", function() { drive(0, 0)});
 
     // set up the web sockets stuff.
     console.log("Setting up websockets");

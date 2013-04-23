@@ -18,7 +18,7 @@ server.listen(app.get('port'));
 
 var io = require('socket.io').listen(server);
 
-console.log("Web server now listening");
+console.log("MESSAGE: Web server now listening");
 
 app.get('/', function(request, response) {
     response.sendfile(__dirname + '/public/index.html');
@@ -39,42 +39,39 @@ io.sockets.on("connection", function(socket) {
         console.log(data);
         var base = 64;
         var change = 32;
+        var endch = 10;
         var serstring = "";
-        if (data.fwd) {
-            console.log("Going forward");
 
-            serstring = serstring + String.fromCharCode(base+change) + String.fromCharCode(base);
-            //serstring = "Z@";
-        }
-        if (data.stop) {
-            console.log("STOP!!");
-            serstring = serstring + String.fromCharCode(base) + String.fromCharCode(base);
-            //serstring = "@@";
-        }
-        if (data.rev) {
-            console.log("Going backwards");
-            serstring = serstring + String.fromCharCode(base-change) + String.fromCharCode(base);
-            //serstring = " @";
-        }
+        var vel = data.vel;
+        var turn = data.turn;
 
-        if (data.left) {
-            console.log("going left");
-            serstring = serstring + String.fromCharCode(110) + String.fromCharCode(1);
+
+        if (vel > 0) {
+            console.log("SOCKET:: Going forward");
+        } else if (vel < 0) {
+            console.log("SOCKET:: Going backwards");
+        } else {
+            console.log("SOCKET: Stationary");
         }
-        if (data.right) {
-            console.log("going right");
-            serstring = serstring + String.fromCharCode(110) + String.fromCharCode(126);
+        serstring = serstring + String.fromCharCode(base + vel);
+
+        if (turn > 0) {
+            console.log("SOCKET:: Turning right");
+        } else if (turn < 0) {
+            console.log("SOCKET:: Turning left");
+        } else {
+            console.log("SOCKET:: No turn");
         }
+        serstring = serstring + String.fromCharCode(base + turn);
         
-        serstring = serstring + "\n";
+        serstring = serstring + String.fromCharCode(endch) + String.fromCharCode(endch);
 
-        console.log(serstring);
-
+        console.log("SOCKET->SERIAL:: " + serstring);
         ser.write(serstring);
     });
 
     socket.on("disconnect", function() {
-        console.log("User has been disconnected");
+        console.log("SOCKET:: User has been disconnected");
     });
 
 
@@ -82,14 +79,20 @@ io.sockets.on("connection", function(socket) {
 
 
 // set up the serial connection
-var ser = new SerialPort("/dev/ttyUSB0"); // TODO fix this to work properly.
+var ser = new SerialPort("/dev/ttyUSB0", {
+//    parser: serialport.parsers.readline("\n"),
+}); // TODO fix this to work properly.
 
 ser.on("open", function() {
-    console.log("Serial Port is ready for business");
+    console.log("SERIAL:: Serial Port is ready for business");
+});
+
+ser.on('data', function(data) {
+//    console.log('SERIAL:: ' + data);
 });
 
 ser.on("error", function(err) {
-        console.log("Couldn't open the USB port");
+        console.log("SERIAL:: Couldn't open the USB port");
 });
 
 
