@@ -1,38 +1,11 @@
 var socket; // used for everything.
 
-var change = 32;
+var change = 48;
 
 function drive(velocity, turnamt) {
     socket.emit('control', {vel: velocity, turn: turnamt});
 } 
 
-function fwd () {
-    // sends a forward command
-    console.log("Sending fwd");
-    drive(change, 0);
-//    socket.emit('control', {vel: change, turn: 0});
-}
-
-function rev () {
-    // sends a forward command
-    console.log("Sending rev");
-    socket.emit('control', {vel: (-1*change), turn: 0});
-}
-function left () {
-    // sends a forward command
-    console.log("Sending left");
-    socket.emit('control', {vel: 0, turn: (-1*change)});
-}
-function right () {
-    // sends a forward command
-    console.log("Sending right");
-    socket.emit('control', {vel: 0, turn: change});
-}
-function stop () {
-    // sends a forward command
-    console.log("Sending stop");
-    socket.emit('control', {vel: 0, turn: 0});
-}
 
 
 $(document).ready(function() {
