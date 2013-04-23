@@ -20,6 +20,9 @@
 #define CORRECTION_VAL 64 
 #define CORRECTION_MULTIPLIER (256 / CORRECTION_VAL)
 
+// used to declare what character we're looking for to signal an instruction
+#define ENDCH 10
+
 // used to determine if we should just stop the motors because
 // under this this there's too much friction to overcome.
 #define MOTOR_THRESHOLD 45
@@ -47,58 +50,18 @@ int16_t next_turn_vel = 0; // -ive is left, +ive is right.
 boolean message_complete = false;  // whether the string is complete
 boolean values_changed = false;
 
-void setup() {
-
-    pinMode(pwm_right, OUTPUT);  
-    pinMode(pwm_left, OUTPUT);
-    pinMode(left_motor, OUTPUT);
-    pinMode(right_motor, OUTPUT);
-
-    Serial.begin(9600);
-    Serial.println("Welcome to the Mobile platform. Bytes are Fwd vel, turn vel and newline to drive");
+void set_motor_direction(uint8_t motor, uint8_t dir) {
+    // sets the motor in the direction wanted.
+    bool direction = HIGH;
+    if (dir == REVERSE) {
+        direction = LOW;
+    }
+    digitalWrite(motor, direction);
 }
 
-void loop() { 
-
-    // check for a message and then start interpolating values.
-    if (message_complete) {
-        // iterate over the items and then do that action.
-        Serial.println("New messages");
-        Serial.print("Forward vel: ");
-        Serial.print(next_fwd_vel);
-        Serial.print(" Turn vel: ");
-        Serial.println(next_turn_vel);
-        message_complete = false;
-
-        // TODO Interpolate values appropriately.
-        fwd_vel = next_fwd_vel;
-        turn_vel = next_turn_vel;
-        values_changed = true;
-    }
-    if (values_changed) {
-        set_motor_velocities(fwd_vel, turn_vel);
-        values_changed = false;
-    }
-}
-
-void serialEvent() {
-    // uses the library serial event to execute after the main loop
-    // we wait until the buffer has at least three bytes in it as we 
-    // use a 3 byte message (fwd vel, turn vel and \n)
-    while (Serial.available() > 2) {
-        // get the new byte off the serial connection.
-        uint8_t vel_byte = (uint8_t)Serial.read();
-        uint8_t turn_byte = (uint8_t)Serial.read();
-        char end_byte = (char)Serial.read();
-
-        if (end_byte == '\n') {
-            message_complete = true;
-            next_fwd_vel = (vel_byte - CORRECTION_VAL) * CORRECTION_MULTIPLIER;
-            next_turn_vel = (turn_byte - CORRECTION_VAL) * CORRECTION_MULTIPLIER;
-        }
-    }
-
-    set_motor_velocities(fwd_vel, turn_vel);
+void set_motor_speed(uint8_t motor, int8_t speed) {
+    // sets the speed of the motor
+    analogWrite(motor, speed);
 }
 
 void set_motor_velocities(int16_t fwd, int16_t turn) {
@@ -154,8 +117,22 @@ void set_motor_velocities(int16_t fwd, int16_t turn) {
         }
     } else {
         // we're stationary so we should do the spin on the spot trick.
+        l_speed = 0;
+        r_speed = 0;
+        if (abs(turn) > MOTOR_THRESHOLD) {
+        // only turn if it's a hard turn
+            if (turn < 0) {
+                //turning left
+                l_dir = REVERSE;
+                r_dir = FORWARD;
+            } else {
+                l_dir = FORWARD;
+                r_dir = REVERSE;
+            }
 
-
+            l_speed = turn;
+            r_speed = turn;
+        }
     }
 
     Serial.print("Fwd: ");
@@ -176,17 +153,58 @@ void set_motor_velocities(int16_t fwd, int16_t turn) {
     set_motor_speed(pwm_right, constrain(abs(r_speed), 0, 255));
 }
 
-void set_motor_direction(uint8_t motor, uint8_t dir) {
-    // sets the motor in the direction wanted.
-    bool direction = HIGH;
-    if (dir == REVERSE) {
-        direction = LOW;
-    }
-    digitalWrite(motor, direction);
+void setup() {
+
+    pinMode(pwm_right, OUTPUT);  
+    pinMode(pwm_left, OUTPUT);
+    pinMode(left_motor, OUTPUT);
+    pinMode(right_motor, OUTPUT);
+
+    Serial.begin(9600);
+    Serial.println("Welcome to the Mobile platform. Bytes are Fwd vel, turn vel and newline to drive");
 }
 
-void set_motor_speed(uint8_t motor, int8_t speed) {
-    // sets the speed of the motor
-    analogWrite(motor, speed);
+void loop() { 
+
+    // check for a message and then start interpolating values.
+    if (message_complete) {
+        // iterate over the items and then do that action.
+        Serial.println("New messages");
+        Serial.print("Forward vel: ");
+        Serial.print(next_fwd_vel);
+        Serial.print(" Turn vel: ");
+        Serial.println(next_turn_vel);
+        message_complete = false;
+
+        // TODO Interpolate values appropriately.
+        fwd_vel = next_fwd_vel;
+        turn_vel = next_turn_vel;
+        values_changed = true;
+    }
+    if (values_changed) {
+        set_motor_velocities(fwd_vel, turn_vel);
+        values_changed = false;
+    }
+}
+
+void serialEvent() {
+    // uses the library serial event to execute after the main loop
+    // we wait until the buffer has at least three bytes in it as we 
+    // use a 3 byte message (fwd vel, turn vel and 255 255)
+    while (Serial.available() > 3) {
+        // get the new byte off the serial connection.
+        uint8_t vel_byte = (uint8_t)Serial.read();
+        uint8_t turn_byte = (uint8_t)Serial.read();
+        char second_end_byte = (char)Serial.read();
+        char end_byte = (char)Serial.read();
+
+        if (end_byte == ENDCH && second_end_byte == ENDCH) {
+            message_complete = true;
+            next_fwd_vel = (vel_byte - CORRECTION_VAL) * CORRECTION_MULTIPLIER;
+            next_turn_vel = (turn_byte - CORRECTION_VAL) * CORRECTION_MULTIPLIER;
+        }
+    }
+
+    //set_motor_velocities(fwd_vel, turn_vel);
 }
 
