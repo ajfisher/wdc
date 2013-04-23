@@ -3,5 +3,5 @@ code.bash
 *.swp
 .*.swo
 css/.DS_Store
-
+build-*
 .DS_Store
