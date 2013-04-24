@@ -60,7 +60,6 @@ var orientation_tracker = function() {
     // gets the current orientation values
     if (current_orientation.gamma === null) { return; }
 
-
     var beta = current_orientation.beta;
     var gamma = current_orientation.gamma;
     var vel = 0;
@@ -75,7 +74,7 @@ var orientation_tracker = function() {
 
     // let's assume a comfortable "neutral" position for gamma is about 45 deg
     // and this is absolute = so + - doesn't matter. > 45 means reversing, <45
-    // means accelerating. And we'll put some break points in there too.
+    // means accelerating. we then work across a range to accomodate speed.
 
     var gamma_abs = Math.abs(gamma); // so we don't keep calulating it
 
@@ -101,8 +100,6 @@ var orientation_tracker = function() {
     vel = vel * vel_dir;
     $("#vel").text(vel);
 
-    // we'll do a test here
-
     // now we do the steering. This can invert depending on the gamma. 
     // So if gamma is positive then steering to the right (clockwise) will
     // have a -ive value for beta. If gamma is -ive then this will reverse.
@@ -122,6 +119,9 @@ var orientation_tracker = function() {
         turn_dir = 1;
     }
 
+    // turning works much the same as acceleration. Just look at the angle
+    // on the range and then map it to the acceptable input range.
+
     if (turn_dir !== 0) {
         // we're turning, now by how much
         if (beta_abs > STEERING_ANGLE_MAX) {
@@ -131,7 +131,9 @@ var orientation_tracker = function() {
     }
     turn = turn * turn_dir;
     $("#turn").text(turn);
-    drive(0, turn); // straight line only.
+
+    // send the message with the speed and turn.
+    drive(vel, turn);
 }
 
 
