@@ -21,8 +21,13 @@
 #define CORRECTION_VAL 64 
 #define CORRECTION_MULTIPLIER (256 / CORRECTION_VAL)
 
+#define MAXSPEED 96
+
 // used to declare what character we're looking for to signal an instruction
 #define ENDCH 10
+
+// after this time set to stop
+#define VALUES_CHANGED_THRESHOLD 5000
 
 // used to determine if we should just stop the motors because
 // under this this there's too much friction to overcome.
@@ -50,6 +55,9 @@ int16_t next_turn_vel = 0; // -ive is left, +ive is right.
 
 boolean message_complete = false;  // whether the string is complete
 boolean values_changed = false;
+
+int16_t values_changed_millis = 0; // holds time since values were last changed
+int16_t last_millis = 0;
 
 void set_motor_direction(uint8_t motor, uint8_t dir) {
     // sets the motor in the direction wanted.
@@ -150,8 +158,8 @@ void set_motor_velocities(int16_t fwd, int16_t turn) {
     set_motor_direction(right_motor, r_dir);
 
     // now set the speed.
-    set_motor_speed(pwm_left, constrain(abs(l_speed), 0, 255));
-    set_motor_speed(pwm_right, constrain(abs(r_speed), 0, 255));
+    set_motor_speed(pwm_left, constrain(abs(l_speed), 0, MAXSPEED));
+    set_motor_speed(pwm_right, constrain(abs(r_speed), 0, MAXSPEED));
 }
 
 void setup() {
@@ -185,9 +193,21 @@ void loop() {
     if (values_changed) {
         set_motor_velocities(fwd_vel, turn_vel);
         values_changed = false;
+        // reset the clock.
+        last_millis = millis();
+        values_changed_millis = 0;
     } else {
         //set_motor_velocities(fwd_vel, turn_vel);
-        ;
+        // see how long we've waited for
+        values_changed_millis = millis() - last_millis;
+        if (values_changed_millis > VALUES_CHANGED_THRESHOLD) {
+            Serial.println("Stopping motors");
+            values_changed_millis = 0;
+            last_millis = millis();
+            fwd_vel = 0;
+            turn_vel = 0;
+            set_motor_velocities(fwd_vel, turn_vel);
+        }
     }
 }
 
