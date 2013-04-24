@@ -52,22 +52,23 @@ io.sockets.on("connection", function(socket) {
         var turn = data.turn;
 
 
-        if (vel > 0) {
+/**        if (vel > 0) {
             console.log("SOCKET:: Going forward");
         } else if (vel < 0) {
             console.log("SOCKET:: Going backwards");
         } else {
             console.log("SOCKET: Stationary");
-        }
+        }**/
         serstring = serstring + String.fromCharCode(base + vel);
 
-        if (turn > 0) {
+/**        if (turn > 0) {
             console.log("SOCKET:: Turning right");
         } else if (turn < 0) {
             console.log("SOCKET:: Turning left");
         } else {
             console.log("SOCKET:: No turn");
-        }
+        }**/
+
         serstring = serstring + String.fromCharCode(base + turn);
         
         serstring = serstring + String.fromCharCode(endch) + String.fromCharCode(endch);

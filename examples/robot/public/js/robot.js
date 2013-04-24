@@ -6,7 +6,7 @@ var REVERSE_ANGLE = 60; // breakpoint for when you are reversing
 var REVERSE_ANGLE_MAX = 90; // limit
 var REVERSE_RANGE = REVERSE_ANGLE_MAX - REVERSE_ANGLE; // gives an operating range
 
-var FORWARD_ANGLE = 50; // breakpoint for when yor are forwarding
+var FORWARD_ANGLE = 45; // breakpoint for when yor are forwarding
 var FORWARD_ANGLE_MAX = 5; // limit
 var FORWARD_RANGE = FORWARD_ANGLE - FORWARD_ANGLE_MAX; // operating range
 
@@ -15,7 +15,7 @@ var STEERING_ANGLE_MAX = 60; // limit
 // orientation globals
 var orientation_running = false; // check if things are running or not
 var current_orientation; // holds the orientation event stuff.
-var sample_rate = 1000 / 30; // number of times to sample sensor a second
+var sample_rate = 1000 / 10; // number of times to sample sensor a second
 var orientation_interval = null;
 
 function drive(velocity, turnamt) {
@@ -36,10 +36,18 @@ function emergencystop() {
 
 function start() {
     // start up everything
-    orientation_running = true;
-    window.addEventListener("deviceorientation", update_gyro);
-    orientation_interval = setInterval(orientation_tracker, sample_rate);
+    if (orientation_running) {
+        orientation_running = false;
+        window.removeEventListener("deviceorientation", update_gyro);
+        clearInterval(orientation_interval);
+    } else {
+        orientation_running = true;
+        window.addEventListener("deviceorientation", update_gyro);
+        orientation_interval = setInterval(orientation_tracker, sample_rate);
+    }
 }
+
+
 
 function update_gyro(e) {
     // just sets the gyro values to a global for later use.
