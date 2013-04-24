@@ -6,6 +6,7 @@ var server = http.createServer(app);
 var fs = require('fs');
 var serialport = require('serialport');
 var SerialPort = serialport.SerialPort;
+var serial_open = false;
 
 // configuration and routing
 app.configure(function() {
@@ -28,7 +29,12 @@ app.get('/', function(request, response) {
 // now we define all the socket routing
 
 io.sockets.on("connection", function(socket) {
-    socket.emit("connect_ack", {msg: "Welcome Control"});
+
+    if (serial_open) {
+        socket.emit("connect_ack", {msg: "Welcome Control", state: "ONLINE"});
+    } else {
+        socket.emit("connect_ack", {msg: "Welcome Control", state: "NOMOTORS"});
+    }
 
     socket.on("control", function(data) {
         // control messages send two bytes followed by \n to the arduino
@@ -70,6 +76,15 @@ io.sockets.on("connection", function(socket) {
         ser.write(serstring);
     });
 
+    socket.on("faststop", function() {
+        console.log("SOCKET:: CLOSE EMERGENCY");
+        ser.close(function() {
+            serial_open = false;
+            console.log("SERIAL:: CLOSED");
+        });
+    });
+
+
     socket.on("disconnect", function() {
         console.log("SOCKET:: User has been disconnected");
     });
@@ -84,11 +99,8 @@ var ser = new SerialPort("/dev/ttyUSB0", {
 }); // TODO fix this to work properly.
 
 ser.on("open", function() {
+    serial_open = true;
     console.log("SERIAL:: Serial Port is ready for business");
-});
-
-ser.on('data', function(data) {
-//    console.log('SERIAL:: ' + data);
 });
 
 ser.on("error", function(err) {
