@@ -71,6 +71,7 @@ io.sockets.on("connection", function(socket) {
             serial_open = false;
             console.log("SERIAL:: CLOSED");
         });
+        process.exit(code=1);
     });
 
 
