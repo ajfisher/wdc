@@ -1,5 +1,6 @@
 body {
     background: #000;
+    color: #fff;
 }
 
 
@@ -28,20 +29,27 @@ div#connection {
 }
 
 div.waiting {
-    background-color: rgb(200,150,100);
+    background-color: rgb(215,200,20);
 }
 
 div.connected {
-    background-color: rgb(100,200,100);
+    background-color: rgb(50,200,50);
 }
 
 div.disconnected {
     background-color: rgb(200, 50, 50);
 }
 
+div.emergency {
+    background-color: rgb(255,50,50);
+}
+
+div.nomotors {
+    background-color: rgb(255, 100, 20);
+}
+
 div#controls {
     text-align: center;
-
 }
 
 div#control p {
