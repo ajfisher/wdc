@@ -17,7 +17,7 @@ var STEERING_RANGE = STEERING_ANGLE_MAX - STEERING_ANGLE_MIN; // operating range
 // orientation globals
 var orientation_running = false; // check if things are running or not
 var current_orientation; // holds the orientation event stuff.
-var sample_rate = 1000 / 2; // number of times to sample sensor a second
+var sample_rate = 1000 / 3; // number of times to sample sensor a second
 var orientation_interval = null;
 
 function drive(velocity, turnamt) {
