@@ -1,7 +1,7 @@
 var socket; // used for everything.
 
 var change = 48;
-var MAXSPEED = 48; // set as constant
+var MAXSPEED = 50; // set as constant
 var REVERSE_ANGLE = 60; // breakpoint for when you are reversing
 var REVERSE_ANGLE_MAX = 90; // limit
 var REVERSE_RANGE = REVERSE_ANGLE_MAX - REVERSE_ANGLE; // gives an operating range
@@ -21,7 +21,7 @@ var sample_rate = 1000 / 10; // number of times to sample sensor a second
 var orientation_interval = null;
 
 function drive(velocity, turnamt) {
-    socket.emit('control', {vel: velocity, turn: turnamt});
+    socket.emit('control', {vel: Math.round(velocity), turn: Math.round(turnamt)});
 }
 
 function emergencystop() {
