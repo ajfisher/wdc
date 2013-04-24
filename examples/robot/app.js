@@ -18,6 +18,8 @@ app.configure(function() {
 server.listen(app.get('port'));
 
 var io = require('socket.io').listen(server);
+io.enable('browser client minification');  // send minified client
+io.set('log level', 1);
 
 console.log("MESSAGE: Web server now listening");
 
@@ -71,7 +73,7 @@ io.sockets.on("connection", function(socket) {
             serial_open = false;
             console.log("SERIAL:: CLOSED");
         });
-        process.exit(code=1);
+        process.exit();
     });
 
 
