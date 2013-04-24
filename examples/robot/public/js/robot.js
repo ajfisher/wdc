@@ -1,7 +1,7 @@
 var socket; // used for everything.
 
 var change = 48;
-var MAXSPEED = 60; // set as constant
+var MAXSPEED = 48; // set as constant
 var REVERSE_ANGLE = 60; // breakpoint for when you are reversing
 var REVERSE_ANGLE_MAX = 90; // limit
 var REVERSE_RANGE = REVERSE_ANGLE_MAX - REVERSE_ANGLE; // gives an operating range
@@ -10,7 +10,9 @@ var FORWARD_ANGLE = 45; // breakpoint for when yor are forwarding
 var FORWARD_ANGLE_MAX = 5; // limit
 var FORWARD_RANGE = FORWARD_ANGLE - FORWARD_ANGLE_MAX; // operating range
 
+var STEERING_ANGLE_MIN = 5; // when to start 
 var STEERING_ANGLE_MAX = 60; // limit
+var STEERING_RANGE = STEERING_ANGLE_MAX - STEERING_ANGLE_MIN; // operating range
 
 // orientation globals
 var orientation_running = false; // check if things are running or not
@@ -100,7 +102,6 @@ var orientation_tracker = function() {
     $("#vel").text(vel);
 
     // we'll do a test here
-    drive(vel, 0); // straight line only.
 
     // now we do the steering. This can invert depending on the gamma. 
     // So if gamma is positive then steering to the right (clockwise) will
@@ -111,32 +112,26 @@ var orientation_tracker = function() {
         gamma_correction = 1;
     }
 
-    beta_corrected = beta * gamma_correction;
+    var beta_corrected = beta * gamma_correction;
+    var beta_abs = Math.abs(beta_corrected);
 
-    if (beta_corrected < -5) {
-        // we're steering left
-        key_left = true;
-        key_right = false;
-    } else if (beta_corrected > 5) {
-        // we're going right
-        key_left = false;
-        key_right = true;
-    } else {
-        // neutral
-        key_left = false;
-        key_right = false;
+    if (beta_corrected < -STEERING_ANGLE_MIN) {
+        // we're going left
+        turn_dir = -1;
+    } else if (beta_corrected > STEERING_ANGLE_MIN) {
+        turn_dir = 1;
     }
-    // now we just determine the steering coefficient
-    if (key_left || key_right) {
-        var beta_abs = Math.abs(beta); // so we don't keep calculating it
-        if (beta_abs < 12) {
-            steering_state = steering_pressure.LIGHT;
-        } else if (beta_abs < 22) {
-            steering_state = steering_pressure.NORMAL;
-        } else {
-            steering_state = steering_pressure.HARD;
+
+    if (turn_dir !== 0) {
+        // we're turning, now by how much
+        if (beta_abs > STEERING_ANGLE_MAX) {
+            beta_abs = STEERING_ANGLE_MAX;
         }
+        turn = (beta_abs - STEERING_ANGLE_MIN) / STEERING_RANGE * MAXSPEED;
     }
+    turn = turn * turn_dir;
+    $("#turn").text(turn);
+    drive(0, turn); // straight line only.
 }
 
 
