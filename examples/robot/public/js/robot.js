@@ -1,23 +1,23 @@
 var socket; // used for everything.
 
 var change = 48;
-var MAXSPEED = 48; // set as constant
-var REVERSE_ANGLE = 60; // breakpoint for when you are reversing
+var MAXSPEED = 30; // set as constant
+var REVERSE_ANGLE = 65; // breakpoint for when you are reversing
 var REVERSE_ANGLE_MAX = 90; // limit
 var REVERSE_RANGE = REVERSE_ANGLE_MAX - REVERSE_ANGLE; // gives an operating range
 
 var FORWARD_ANGLE = 50; // breakpoint for when yor are forwarding
-var FORWARD_ANGLE_MAX = 5; // limit
+var FORWARD_ANGLE_MAX = 10; // limit
 var FORWARD_RANGE = FORWARD_ANGLE - FORWARD_ANGLE_MAX; // operating range
 
-var STEERING_ANGLE_MIN = 5; // when to start 
-var STEERING_ANGLE_MAX = 60; // limit
+var STEERING_ANGLE_MIN = 15; // when to start 
+var STEERING_ANGLE_MAX = 50; // limit
 var STEERING_RANGE = STEERING_ANGLE_MAX - STEERING_ANGLE_MIN; // operating range
 
 // orientation globals
 var orientation_running = false; // check if things are running or not
 var current_orientation; // holds the orientation event stuff.
-var sample_rate = 1000 / 10; // number of times to sample sensor a second
+var sample_rate = 1000 / 2; // number of times to sample sensor a second
 var orientation_interval = null;
 
 function drive(velocity, turnamt) {

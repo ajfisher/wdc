@@ -18,7 +18,7 @@ app.configure(function() {
 server.listen(app.get('port'));
 
 var io = require('socket.io').listen(server);
-io.enable('browser client minification');  // send minified client
+//io.enable('browser client minification');  // send minified client
 io.set('log level', 1);
 
 console.log("MESSAGE: Web server now listening");
@@ -44,7 +44,7 @@ io.sockets.on("connection", function(socket) {
         // Byte 1: 0-255: direction with 128 being 0, >128 turns right and < 128 turns left
         //
         // for testing we use 0-127 with 64 being the flip over point.
-        console.log(data);
+        //console.log(data);
         var base = 64;
         var change = 32;
         var endch = 10;
@@ -76,11 +76,9 @@ io.sockets.on("connection", function(socket) {
         process.exit();
     });
 
-
     socket.on("disconnect", function() {
         console.log("SOCKET:: User has been disconnected");
     });
-
 
 });
 
