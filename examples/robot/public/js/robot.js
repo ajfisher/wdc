@@ -88,7 +88,12 @@ var orientation_tracker = function() {
         // now we determine the extent.
     }
 
+    vel = vel * vel_dir;
     $("#vel").text(vel);
+
+    // we'll do a test here
+    drive(vel, 0); // straight line only.
+
     // now we do the steering. This can invert depending on the gamma. 
     // So if gamma is positive then steering to the right (clockwise) will
     // have a -ive value for beta. If gamma is -ive then this will reverse.
