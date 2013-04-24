@@ -51,6 +51,12 @@ io.sockets.on("connection", function(socket) {
         var vel = data.vel;
         var turn = data.turn;
 
+        if (base + vel == endch || base + turn == endch) {
+            // just check to ensure no character conflicts.
+            vel = vel + 1;
+            turn = turn + 1;
+        }
+
         serstring = serstring + String.fromCharCode(base + vel)+ String.fromCharCode(base + turn);
 
         serstring = serstring + String.fromCharCode(endch) + String.fromCharCode(endch);
