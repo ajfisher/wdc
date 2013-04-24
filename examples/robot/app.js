@@ -51,29 +51,11 @@ io.sockets.on("connection", function(socket) {
         var vel = data.vel;
         var turn = data.turn;
 
+        serstring = serstring + String.fromCharCode(base + vel)+ String.fromCharCode(base + turn);
 
-/**        if (vel > 0) {
-            console.log("SOCKET:: Going forward");
-        } else if (vel < 0) {
-            console.log("SOCKET:: Going backwards");
-        } else {
-            console.log("SOCKET: Stationary");
-        }**/
-        serstring = serstring + String.fromCharCode(base + vel);
-
-/**        if (turn > 0) {
-            console.log("SOCKET:: Turning right");
-        } else if (turn < 0) {
-            console.log("SOCKET:: Turning left");
-        } else {
-            console.log("SOCKET:: No turn");
-        }**/
-
-        serstring = serstring + String.fromCharCode(base + turn);
-        
         serstring = serstring + String.fromCharCode(endch) + String.fromCharCode(endch);
 
-        console.log("SOCKET->SERIAL:: " + serstring);
+        //console.log("SOCKET->SERIAL:: " + serstring);
         ser.write(serstring);
     });
 
@@ -96,8 +78,8 @@ io.sockets.on("connection", function(socket) {
 
 // set up the serial connection
 var ser = new SerialPort("/dev/ttyUSB0", {
-//    parser: serialport.parsers.readline("\n"),
-}); // TODO fix this to work properly.
+    baudrate: 4800
+});
 
 ser.on("open", function() {
     serial_open = true;

@@ -11,6 +11,7 @@
      Byte 1: Forward / Reverse speed 0 - 255
      Byte 2: Left / Right speed 0 - 255
      Byte 3: End \n
+     Byte 4: End \n
 
 */
 
@@ -135,15 +136,15 @@ void set_motor_velocities(int16_t fwd, int16_t turn) {
         }
     }
 
-    Serial.print("Fwd: ");
-    Serial.print(fwd);
-    Serial.print(" Turn: ");
-    Serial.print(turn);
-    Serial.print(" S(l): ");
-    Serial.print(l_speed);
-    Serial.print(" S(r): ");
-    Serial.print(r_speed);
-    Serial.println();
+    //Serial.print("Fwd: ");
+    //Serial.print(fwd);
+    //Serial.print(" Turn: ");
+    //Serial.print(turn);
+    //Serial.print(" S(l): ");
+    //Serial.print(l_speed);
+    //Serial.print(" S(r): ");
+    //Serial.print(r_speed);
+    //Serial.println();
 
     set_motor_direction(left_motor, l_dir);
     set_motor_direction(right_motor, r_dir);
@@ -160,7 +161,7 @@ void setup() {
     pinMode(left_motor, OUTPUT);
     pinMode(right_motor, OUTPUT);
 
-    Serial.begin(9600);
+    Serial.begin(4800);
     Serial.println("Welcome to the Mobile platform. Bytes are Fwd vel, turn vel and newline to drive");
 }
 
@@ -169,11 +170,11 @@ void loop() {
     // check for a message and then start interpolating values.
     if (message_complete) {
         // iterate over the items and then do that action.
-        Serial.println("New messages");
-        Serial.print("Forward vel: ");
-        Serial.print(next_fwd_vel);
-        Serial.print(" Turn vel: ");
-        Serial.println(next_turn_vel);
+        //Serial.println("New messages");
+        //Serial.print("Forward vel: ");
+        //Serial.print(next_fwd_vel);
+        //Serial.print(" Turn vel: ");
+        //Serial.println(next_turn_vel);
         message_complete = false;
 
         // TODO Interpolate values appropriately.
