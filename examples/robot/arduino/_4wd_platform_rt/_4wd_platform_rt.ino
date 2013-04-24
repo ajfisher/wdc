@@ -185,6 +185,10 @@ void loop() {
     if (values_changed) {
         set_motor_velocities(fwd_vel, turn_vel);
         values_changed = false;
+    } else {
+        // eventually just degrade them to nothing.
+        //set_motor_velocities(--fwd_vel, turn_vel);
+        ;
     }
 }
 
