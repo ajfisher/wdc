@@ -49,8 +49,6 @@ function start() {
     }
 }
 
-
-
 function update_gyro(e) {
     // just sets the gyro values to a global for later use.
     current_orientation = e;
@@ -142,14 +140,6 @@ $(document).ready(function() {
     mo.init();
 
     // do the even binding
-    $("#fwd").bind("click", function() { drive(change, 0)});
-    $("#rev").bind("click", function() { drive(-change, 0)});
-    $("#left").bind("click", function() { drive(0, change)});
-    $("#fwdleft").bind("click", function() { drive(change, change)});
-    $("#revleft").bind("click", function() { drive(-change, change)});
-    $("#right").bind("click", function() { drive(0, -change)});
-    $("#fwdright").bind("click", function() { drive(change, -change)});
-    $("#revright").bind("click", function() { drive(-change, -change)});
     $("#stop").bind("click", function() { drive(0, 0)});
 
     $("#startgyro").bind("click", start);
