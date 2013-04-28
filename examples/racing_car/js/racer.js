@@ -218,7 +218,7 @@ var Draw = {
         if (offroad) {
             bounce = bounce * 5;
         } else {
-            bounce = bounce * 1.5;
+            bounce = bounce * 1.1;
         }
         ctx.drawImage(PLAYER.sprite, x, (y + bounce), w, h);
 
