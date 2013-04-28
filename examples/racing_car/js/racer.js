@@ -42,7 +42,7 @@ var KEY = {
   DOWN:  40,
 };
 
-var PLAYER = { w: 80, h: 50, colour: "#ffffff" };
+var PLAYER = { w: 314, h: 153, colour: "#ffffff" };
 
 // defines everything around the road geometry
 var ROAD = {
@@ -110,6 +110,7 @@ var player_x = 0;
 var player_z = null;
 var speed = 0;
 var position = 0;          // position of the player on the length of the track.
+var offroad = false;
 var max_speed = segment_length/step;
 var accel = max_speed / 5;
 var decel = -max_speed /10;
@@ -203,15 +204,24 @@ var Draw = {
 
         // this compensates the scale factors of the vehicle etc back to 
         // the overall scale of the display
-        w = (PLAYER.w * player_z_scale * width / 2) * sprite_scale;
-        h = (PLAYER.h * player_z_scale * width /2) * sprite_scale;
+        var w = (PLAYER.w * player_z_scale * width / 2) * sprite_scale;
+        var h = (PLAYER.h * player_z_scale * width /2) * sprite_scale;
 
         // this creates the relative offset to then draw the item.
-        x = width /2 + (w * -0.5);
-        y = height + (h * -1.0); 
+        var x = width /2 + (w * -0.5);
+        var y = height + (h * -1.0); 
 
-        // TODO Actually draw the car...
-        ctx.fillRect(x, y, w , h);
+        // get a random value between -1 & +1. The more speed there is
+        // the greater the bounce. If you're offroad make it bounce more 
+        var bounce = ((Math.random() * 3) - 1) * (speed/max_speed);
+        // no real science to the values below - just feel coefficients.
+        if (offroad) {
+            bounce = bounce * 5;
+        } else {
+            bounce = bounce * 1.5;
+        }
+        ctx.drawImage(PLAYER.sprite, x, (y + bounce), w, h);
+
     },
 
 
@@ -357,6 +367,9 @@ var Setup = {
 
         this.setup_listeners();
 
+        PLAYER.sprite = document.createElement('img');
+        PLAYER.sprite.src = 'img/car.png';
+
         player_z = (camera_height * camera_depth);
         player_z_scale = (camera_depth / player_z);
     },
@@ -444,8 +457,9 @@ var Racer = {
             speed = Physics.accelerate(speed, decel, dt);
         }
 
+        offroad = false;
         if (((player_x < -1) || (player_x > 1)) && (speed > offroad_limit)) {
-            console.log("OFFROAD");
+            offroad = true;
             speed = Physics.accelerate(speed, offroad_decel, dt);
         }
 
