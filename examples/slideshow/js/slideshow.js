@@ -81,7 +81,7 @@ var motion_tracker = function() {
 $(document).ready(function() {
     mo.init();
 
-    if (! mo.motion) {
+    if (mo.motion === false) {
         $("#nomotion").show();
     } else {
         // we do all the set up stuff.
