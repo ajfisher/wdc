@@ -1,9 +1,11 @@
 body {
     font-family: helvetica, arial, sans serif;
+    background-color: rgb(63,63,63);
 }
 
 h1 {
     margin: 0.1em;
+    color: rgb(241,214,58);
 }
 
 div#nomotion {
@@ -33,10 +35,11 @@ div#motiondata {
 
 div#images {
     display: inline-block;
-    border: 10px solid rgb(254,188,111);
+    border: 10px solid rgb(241,214,58);
     max-width: 612px;
 }
 
+a { color: #fff; }
 
 div#images img {
     width: 100%;

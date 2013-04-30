@@ -200,7 +200,7 @@ var Draw = {
 
     player: function() {
         // draws the racer in
-        ctx.fillStyle = "#ffffff";
+        //ctx.fillStyle = "#ffffff";
 
         // this compensates the scale factors of the vehicle etc back to 
         // the overall scale of the display
