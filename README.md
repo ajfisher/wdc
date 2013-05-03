@@ -17,8 +17,6 @@ In Python (will run server on 0.0.0.0:8000):
     cd /path/to/repo/dir
     python -m SimpleHTTPServer
 
-
-
 In node (will run server on 0.0.0.0:8080)
 
     npm install http-server -g 
