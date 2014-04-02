@@ -1,0 +1,27 @@
+{
+  "name": "WDC14",
+  "version": "0.0.1",
+  "description": "WDC 14 examples and demos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ajfisher/wdc.git"
+  },
+  "keywords": [
+    "wdc",
+    "device",
+    "api"
+  ],
+  "author": "Andrew Fisher <ajfisher.td@gmail.com>",
+  "license": "CC-BY-SA 3.0",
+  "bugs": {
+    "url": "https://github.com/ajfisher/wdc/issues"
+  },
+  "homepage": "https://github.com/ajfisher/wdc",
+  "dependencies": {
+    "http-server": "^0.6.1"
+  }
+}
