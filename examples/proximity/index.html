@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Proximity test</title>
+    <link rel="stylesheet" href="css/slides.css">
+
+</head>
+<body>
+    <div id="main">
+        <p>Put your hand close to the top of the screen (where you'd usually put
+        your ear when you make a call) and you should get some information about
+        your proximity</p>
+        <p id="usermsg"></p>
+        <p id="devicemsg"></p>
+    </div>
+    <script type="text/javascript">
+
+        var usermsg = document.querySelector("#usermsg");
+        var devicemsg = document.querySelector("#devicemsg");
+        window.addEventListener('deviceproximity', function(event) {
+          devicemsg.textContent = "val: " + event.value + " max detect: " + event.max +  " min detect: " + event.min;
+        });
+
+        window.addEventListener('userproximity', function(event) {
+          if (event.near) {
+            // do something relating to being close by
+            usermsg.textContent = "You're close to the screen (near)";
+          } else {
+            // do something relating to being far away
+            usermsg.textContent = "You're not close to the screen (not near)";
+          }
+        });
+
+    </script>
+</body>
+</html>
