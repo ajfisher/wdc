@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Vibration test</title>
+    <link rel="stylesheet" href="css/slides.css">
+
+</head>
+<body>
+    <div id="main">
+        <a href="#" id="vibration">Touch to vibrate</a>
+        <p id="msg"></p>
+    </div>
+    <script type="text/javascript">
+        navigator.vibrate = navigator.vibrate ||
+                            navigator.webkitVibrate ||
+                            navigator.msVibrate;
+
+        var msg = document.querySelector("#msg");
+
+        if (navigator.vibrate) {
+            msg.textContent = "We can vibrate";
+            document.querySelector("#vibration").addEventListener("click", function() {
+                navigator.vibrate([200,1000,200,1000,200]);
+            });
+        } else {
+            msg.textContent = "We can't vibrate";
+        }
+
+    </script>
+</body>
+</html>
