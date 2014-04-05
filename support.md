@@ -8,9 +8,9 @@ Device API as of April 2014.
 Current status: Last Call Draft 
 Spec: http://www.w3.org/TR/2014/WD-vibration-20140211/
 Supported: Chrome for Android 4.0+, Firefox for Android
-Demo: /examples/vibrate
 Unsupported: OSX Safari, iOS Safari. 
 Non-detectable unsupported: Chrome desktop
+Demo: /examples/vibrate
 
 Notes: Biggest issue is purported support on Chrome for Desktop devices (ie
 the navigator.vibrate object exists) making detection hard. As there is no
@@ -25,12 +25,28 @@ device motion to detect the jitter.
 
 Current status: Candidate Recommendation (October 2013)
 Spec: http://www.w3.org/TR/proximity/
-Supported: Firefox for Android 4.0+
 Demo: /examples/proximity
+Supported: Firefox for Android 4.0+
 Unsupported: all others
 
 Notes: Heavily dependent on the proximity sensor in the device. Nexus 7 can only
 maximally go 5cm for example.
 
-Currently has issues with a live value, it is all or nothing at the moment.
+Currently has issues with a live, partial value, it is all or nothing at the moment.
+
+# Battery Status API
+
+Current Status: Candidate Recommendation (May 2012)
+Spec: http://www.w3.org/TR/battery-status/
+Demo: /examples/battery
+Supported: Firefox all
+Unsupported:Chrome all, Safari all
+
+Notes: Only part of the spec not adopted on FF mobile is the charging / discharging
+time values. This is solvable using a battery app plug in but not natively. 
+
+
+
+
+
 
