@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Device Light test</title>
+    <link rel="stylesheet" href="css/slides.css">
+
+</head>
+<body>
+    <div id="main">
+        <p id="msg">No support for the devlice light api</p>
+        <p>Device Light measures light levels in LUX. Typical values are:</p>
+        <ul>
+            <li>Naturally lit room: ~75-125</li>
+            <li>Bright office: </li>
+            <li>Outside direct sunshine: ~4K+</li>
+            <li>Outside cloudy day: ~2-4K</li>
+            <li>Dim room (eg lamps only): ~10-30</li>
+            <li>Indoors at night: </li>
+            <li>Outside at night: </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+
+        var msg = document.querySelector("#msg");
+        window.addEventListener('devicelight', function(event) { 
+            msg.textContent = "light level: " + event.value;
+        });
+
+    </script>
+</body>
+</html>
