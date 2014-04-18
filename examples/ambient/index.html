@@ -24,10 +24,17 @@
     </div>
     <script type="text/javascript">
 
-        var msg = document.querySelector("#msg");
-        window.addEventListener('devicelight', function(event) { 
-            msg.textContent = "light level: " + event.value;
-        });
+        if (window.DeviceLightEvent) {
+            // capable
+
+            var msg = document.querySelector("#msg");
+            msg.textContent = "Browser supports Device Light API. Waiting for a change";
+            window.addEventListener('devicelight', function(event) { 
+                msg.textContent = "light level: " + event.value;
+            });
+        } else {
+            // not capable
+        }
 
     </script>
 </body>
