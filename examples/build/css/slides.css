@@ -1,28 +1,33 @@
 
-/* line 147 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 152 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 
 /* line 1 : /Users/andrewfisher/dev/wdc/node_modules/grunt-contrib-stylus/node_modules/stylus/lib/functions/index.styl */
 
 /* line 18 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+@import url("http://fonts.googleapis.com/css?family=Muli");
+
+/* line 20 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 html {
   font-size: 62.5%;
 }
 
-/* line 22 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 24 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 html,
 body {
   height: 100%;
 }
 
-/* line 25 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 27 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body {
   background: #3f3f3f;
   color: #e8e8e8;
   margin: 0;
   font-size: 2rem;
+  font-family: "Muli", sans-serif;
+  font-weight: bold;
 }
 
-/* line 32 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 36 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 .container {
   display: -webkit-box;
   display: -webkit-flex;
@@ -39,92 +44,92 @@ body {
   height: 100%;
 }
 
-/* line 39 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 43 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 #info {
   border-radius: 5px;
   padding: 1rem 3rem;
   max-width: 90%;
 }
 
-/* line 45 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 49 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 /** Define out the various states of the messaging now **/
 
-/* line 46 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 50 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 
-/* line 49 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 53 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body div#info p {
   display: none;
 }
 
-/* line 54 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 58 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.capable p#instruction {
   display: block;
 }
 
-/* line 58 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 62 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.capable div#info {
   background-color: #f0d232;
   color: #3f3f3f;
 }
 
-/* line 63 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 67 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.capable div#info p.infomsg {
   display: block;
 }
 
-/* line 67 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 71 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.incapable #incapable {
   display: block;
 }
 
-/* line 71 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 75 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.incapable div#info {
   background-color: rgba(240,65,20,0.8);
 }
 
-/* line 70 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 74 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 /** near and far definitions **/
 
-/* line 76 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 80 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.near p#near {
   display: block;
   font-size: 6em;
   color: #f0d232;
 }
 
-/* line 83 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 87 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.near div#info {
   background-color: transparent;
   max-width: 100%;
 }
 
-/* line 87 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 91 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.far p#far {
   display: block;
   font-size: 1.2em;
   color: #6e6e6e;
 }
 
-/* line 94 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 98 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body.far div#info {
   background-color: transparent;
 }
 
-/* line 92 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 96 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 /** Battery demo styles **/
 
-/* line 98 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 102 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body#batterydemo.capable p {
   display: block;
 }
 
-/* line 101 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 105 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body#batterydemo.capable #gauge {
   height: 1px;
   background-color: #f0d232;
 }
 
-/* line 106 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 110 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body#batterydemo.capable div#meter {
   display: -webkit-box;
   display: -webkit-flex;
@@ -142,46 +147,47 @@ body#batterydemo.capable div#meter {
   width: 90%;
 }
 
-/* line 113 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 117 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 body#batterydemo.incapable div#meter,
 body#batterydemo.capable div#info {
   display: none;
 }
 
-/* line 117 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 121 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 div#meter p {
   margin: 0;
   padding: 0;
 }
 
-/* line 122 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 126 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 div#meter p#powerlevel {
   line-height: 0;
   padding-bottom: 1em;
+  font-weight: normal;
 }
 
-/* line 126 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 131 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 span#power {
   font-size: 18rem;
 }
 
-/* line 131 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 136 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 /** various media query overrides **/
 
-/* line 133 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 138 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
 @media (min-width: 1000px) {
 
-/* line 135 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 140 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
   html {
     font-size: 100%;
   }
 
-/* line 139 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 144 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
   #info {
     max-width: 50%;
   }
 
-/* line 143 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
+/* line 148 : /Users/andrewfisher/dev/wdc/examples/common/stylus/slides.styl */
   #meter {
     max-width: 50%;
   }
