@@ -11,8 +11,26 @@ highlight = ajyellow;
 background-dark = ajdark-grey;
 body-light = ajwhite;
 
+standard-text = 62.5%
 
 padding-size = 1rem 3rem;
 standard-size = 2rem;
 
+fonts = "Century Gothic", "Muli", sans-serif;
+
 @import url(http://fonts.googleapis.com/css?family=Muli);
+
+
+#info {
+    border-radius: 5px;
+    padding: padding-size;
+    max-width: 90%;
+}
+
+body.incapable #incapable {
+    display: block;
+}
+
+body.incapable div#info {
+    background-color: error;
+}

@@ -1,0 +1,87 @@
+@import vars;
+
+html {
+    font-size: standard-text;
+}
+
+html, body {
+    height: 100%;
+}
+body{
+    background: background-dark;
+    color: body-light;
+    margin: 0;
+    font-size: standard-size;
+    font-family: "Helvetica", sans-serif;
+    font-weight: normal;
+    /**padding: 1em;**/
+}
+
+h1 {
+    font-family: fonts;
+    font-weight: bold;
+    color: ajyellow;
+    margin: 0;
+}
+
+body.capable #info {
+    display: none;
+}
+
+section#content {
+    max-width: 100%;
+    padding: 0 0.5em;
+}
+
+
+/** styles for the different light levels **/
+
+/** dark **/
+
+body.dark  {
+    color: darken(ajwhite, 50%);
+}
+
+body.dark h1 {
+    color: darken(ajyellow, 40%);
+}
+
+/** dim **/
+
+body.dim  {
+    color: darken(ajwhite, 25%);
+}
+
+body.dim h1 {
+    color: darken(ajyellow, 10%);
+}
+
+/** bright **/
+
+body.bright  {
+    color: ajdark-grey;
+    background: ajwhite;
+    font-weight: normal;
+}
+
+body.bright h1 {
+    background-color: ajyellow;
+    color: ajdark-grey;
+}
+
+
+@media (min-width: 1000px) {
+
+    body {
+        padding: 1em;
+    }
+
+    section#content {
+        max-width: 90%
+        padding: padding-size;
+    }
+
+} 
+
+
+

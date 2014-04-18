@@ -9,14 +9,16 @@ module.exports = function (grunt) {
                     compress: false
                 },
                 files: {
-                    'examples/common/css/slides.css': 'examples/common/stylus/slides.styl'
+                    'examples/common/css/slides.css': 'examples/common/stylus/slides.styl',
+                    'examples/common/css/contrast.css': 'examples/common/stylus/contrast.styl'
                 }
             }
         },
         autoprefixer: {
             dist: {
                 files: {
-                    'examples/build/css/slides.css': 'examples/common/css/slides.css'
+                    'examples/build/css/slides.css': 'examples/common/css/slides.css',
+                    'examples/build/css/contrast.css': 'examples/common/css/contrast.css'
                 }
             }
         },

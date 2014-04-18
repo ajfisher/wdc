@@ -1,0 +1,127 @@
+
+/* line 85 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+
+/* line 1 : /Users/andrewfisher/dev/wdc/node_modules/grunt-contrib-stylus/node_modules/stylus/lib/functions/index.styl */
+
+/* line 293 : /Users/andrewfisher/dev/wdc/node_modules/grunt-contrib-stylus/node_modules/stylus/lib/functions/index.styl */
+
+/* line 3 : /Users/andrewfisher/dev/wdc/examples/common/stylus/vars.styl */
+@import url("http://Century Gothic, Muli, sans-serif.googleapis.com/css?family=Muli");
+
+/* line 24 : /Users/andrewfisher/dev/wdc/examples/common/stylus/vars.styl */
+#info {
+  border-radius: 5px;
+  padding: 1rem 3rem;
+  max-width: 90%;
+}
+
+/* line 31 : /Users/andrewfisher/dev/wdc/examples/common/stylus/vars.styl */
+body.incapable #incapable {
+  display: block;
+}
+
+/* line 34 : /Users/andrewfisher/dev/wdc/examples/common/stylus/vars.styl */
+body.incapable div#info {
+  background-color: rgba(240,65,20,0.8);
+}
+
+/* line 3 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+html {
+  font-size: 62.5%;
+}
+
+/* line 7 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+html,
+body {
+  height: 100%;
+}
+
+/* line 10 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+body {
+  background: #3f3f3f;
+  color: #e8e8e8;
+  margin: 0;
+  font-size: 2rem;
+  font-family: "Helvetica", sans-serif;
+  font-weight: normal;
+/**padding: 1em;**/
+}
+
+/* line 20 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+h1 {
+  font-family: "Century Gothic", "Muli", sans-serif;
+  font-weight: bold;
+  color: #f0d232;
+  margin: 0;
+}
+
+/* line 44 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+body.capable #info {
+  display: none;
+}
+
+/* line 47 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+section#content {
+  max-width: 100%;
+  padding: 0 0.5em;
+}
+
+/* line 27 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+/** styles for the different light levels **/
+
+/* line 27 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+/** dark **/
+
+/* line 53 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+body.dark {
+  color: #747474;
+}
+
+/* line 56 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+body.dark h1 {
+  color: #a28a0c;
+}
+
+/* line 27 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+/** dim **/
+
+/* line 60 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+body.dim {
+  color: #aeaeae;
+}
+
+/* line 63 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+body.dim h1 {
+  color: #eecc17;
+}
+
+/* line 27 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+/** bright **/
+
+/* line 67 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+body.bright {
+  color: #3f3f3f;
+  background: #e8e8e8;
+  font-weight: normal;
+}
+
+/* line 72 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+body.bright h1 {
+  background-color: #f0d232;
+  color: #3f3f3f;
+}
+
+/* line 76 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+@media (min-width: 1000px) {
+
+/* line 77 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+  body {
+    padding: 1em;
+  }
+
+/* line 80 : /Users/andrewfisher/dev/wdc/examples/common/stylus/contrast.styl */
+  section#content {
+    max-width: 90%;
+    padding: 1rem 3rem;
+  }
+}

@@ -2,7 +2,7 @@
 @import vars;
 
 html {
-    font-size: 62.5%;
+    font-size: standard-text;
 }
 
 html, body {
@@ -13,7 +13,7 @@ body{
     color: body-light;
     margin: 0;
     font-size: standard-size;
-    font-family: "Century Gothic", "Muli", sans-serif;
+    font-family: fonts;
     font-weight: bold;
 }
 
@@ -24,11 +24,6 @@ body{
     height: 100%;
 }
 
-#info {
-    border-radius: 5px;
-    padding: padding-size;
-    max-width: 90%;
-}
 
 /** Define out the various states of the messaging now **/
 p#instruction {
@@ -51,13 +46,6 @@ body.capable div#info p.infomsg {
     display: block;
 }
 
-body.incapable #incapable {
-    display: block;
-}
-
-body.incapable div#info {
-    background-color: error;
-}
 
 /** near and far definitions **/
 body.near p#near {
