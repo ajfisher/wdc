@@ -1,0 +1,74 @@
+body {
+    background: rgb(63,63,63);
+    margin-top: 5%;
+}
+
+#game {
+    text-align: center;
+}
+
+
+#game div#start {
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 100px;
+    margin-left: -75px;
+    margin-top: -80px;
+    background-color: rgb(241,214,58);
+    -webkit-border-radius: 0.75em;
+    -moz-border-radius: 0.75em;
+    border-radius: 0.75em;
+}
+
+div#start p {
+    
+    padding-top: 30px;
+    margin: 0;
+    color: rgb(63,63,63);
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+div#message {
+    margin: 1em 0em;
+    padding: 0.75em 0.75em;
+    background-color: rgb(200,100,100);
+    -webkit-border-radius: 0.75em;
+    -moz-border-radius: 0.75em;
+    border-radius: 0.75em;
+    color: #fff;
+    font-weight: bold;
+    /**display: none;**/
+}
+
+div#orientdata {
+    display: none;
+}
+@media all and (orientation: landscape) {
+    div#message {
+        display: none;
+    }
+}
+
+@media all and (orientation: portrait) {
+    div#game {
+        display: none;
+    }
+}
+
+@media all and (orientation: landscape) and (max-width: 480px) {
+
+    #game div#start {
+        width: 100px;
+        height: 60px;
+        margin-left: -50px;
+        margin-top: -40px;
+    }
+
+    div#start p {
+        padding-top: 10px;
+    }
+}
