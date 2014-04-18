@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Near / Far</title>
+    <link rel="stylesheet" href="/examples/build/css/slides.css">
+
+</head>
+<body>
+    <div id="main" class="container">
+        <div id="info">
+            <p id="incapable">Your device doesn't support the Proximity API</p>
+            <p id="instruction">Your device supports the Proximity API. Whether
+                you have a sensor in it is a different question. Wave your hand
+                near the surface of the device and try to trigger it.</p>
+            <p id="near">NEAR</p>
+            <p id="far">far</p>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        var proximity_capable = false;
+        if (window.DeviceProximityEvent || window.UserProximityEvent) {
+            // we are capable
+            proximity_capable = true;
+
+            document.body.className = "capable";
+            // add event listener
+            window.addEventListener('userproximity', function(event) {
+                if (event.near) {
+                    // do something relating to being close by
+                    document.body.className = "near"
+                } else {
+                    // do something relating to being far away
+                    document.body.className = "far"          
+                }
+            });
+        } else {
+            // we aren't
+            document.body.className = "incapable";
+        }
+
+    </script>
+</body>
+</html>

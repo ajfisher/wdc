@@ -50,3 +50,20 @@ time values. This is solvable using a battery app plug in but not natively.
 
 
 
+# Device Light API
+
+Current status: Candidate Recommendation (October 2013)
+Spec: http://www.w3.org/TR/ambient-light/
+Supported: Firefox for Android 4.0+
+Demo: /examples/ambient
+Unsupported: all others
+
+Notes: Very dependent on the sensor available. Phones appear to have better sensors
+with higher ranges than laptops however they tend to be highly directional. As a result 
+they tend to under report ambient light levels compared to a laptop which tends
+to be a bit more normal.
+
+Highest value seen is 10K with a Nexus 4 in direct sunlight.
+
+LightLevel API not currently supported, with direct values only. Currently under
+review by the spec team.

@@ -1,0 +1,106 @@
+// Define all the variables
+
+ajlight-grey = rgb(110,110,110);
+ajdark-grey = rgb(63,63,63);
+ajwhite = rgb(232,232,232);
+ajyellow = rgb(240,210,50);
+
+error = rgba(240,65,20,0.8);
+
+highlight = ajyellow;
+background-dark = ajdark-grey;
+body-light = ajwhite;
+
+
+padding-size = 1rem 3rem;
+standard-size = 2rem;
+
+html {
+    font-size: 62.5%;
+}
+
+html, body {
+    height: 100%;
+}
+body{
+    background: background-dark;
+    color: body-light;
+    margin: 0;
+    font-size: standard-size;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#info {
+    border-radius: 5px;
+    padding: padding-size;
+    max-width: 90%;
+}
+
+/** Define out the various states of the messaging now **/
+p#instruction {
+}
+
+body div#info p {
+    display: none;
+}
+
+body.capable p#instruction {
+    display: block;
+}
+
+body.capable div#info {
+    background-color: ajyellow;
+    color: ajdark-grey;
+}
+
+body.capable div#info p.infomsg {
+    display: block;
+}
+
+body.incapable p#incapable {
+    display: block;
+}
+
+body.incapable div#info {
+    background-color: error;
+}
+
+/** near and far definitions **/
+body.near p#near {
+    display: block;
+    font-size: 6em;
+    color: ajyellow;
+}
+
+body.near div#info {
+    background-color: transparent;
+    max-width: 100%;
+}
+
+body.far p#far {
+    display: block;
+    font-size: 1.2em;
+    color: ajlight-grey;
+}
+
+body.far div#info {
+    background-color: transparent;
+}
+
+@media (min-width: 1000px) {
+
+    html {
+        font-size: 100%;
+    }
+
+    #info {
+        max-width: 50%;
+    }
+}
+
