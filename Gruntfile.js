@@ -22,7 +22,7 @@ module.exports = function (grunt) {
         },
         watch: {
             styles: {
-                files: ['examples/common/stylus/*.styl','examples/common/css/*.css'],
+                files: ['examples/common/stylus/*.styl'],
                 tasks: ['stylus', 'autoprefixer']
             }
         }
