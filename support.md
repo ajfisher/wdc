@@ -17,9 +17,8 @@ the navigator.vibrate object exists) making detection hard. As there is no
 secondary event that is fired once a vibration occurs it would be difficult to
 tell whether there was true support or not. 
 
-Detection options: Look for something like android in UA to determine if supported, 
-alternatively do a test after trigging a vibration event for something like
-device motion to detect the jitter.
+Also seems that latest push to chrome has removed support for vibrate from the
+device which is annoying. Noted to the Chrome team.
 
 # Proximity API
 
