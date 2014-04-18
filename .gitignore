@@ -5,3 +5,4 @@ code.bash
 css/.DS_Store
 build-*
 .DS_Store
+/examples/common/css
