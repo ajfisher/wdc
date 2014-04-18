@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Battery Meter</title>
+    <link rel="stylesheet" href="/examples/build/css/slides.css">
+</head>
+<body id="batterydemo">
+    <div id="main" class="container">
+        <div id="info">
+            <p id="incapable">Unfortunately your browser doesn't support the battery status API</p>
+        </div>
+        <div id="meter">
+            <p id="powerlevel"><span id="power"></span>%</p>
+            <div id="gauge"></div>
+            <p><span id="time"></span> <span id="fullempty"></span></p>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        navigator.battery = navigator.battery || navigator.webkitBattery;
+
+        if (navigator.battery) {
+
+            document.body.className += " capable";
+
+            // define listeners for the different states
+
+            navigator.battery.addEventListener('chargingchange', function(event) {
+                // fires when there is a change in the type of charging effect.
+                update_status(navigator.battery);
+            });
+            navigator.battery.addEventListener('chargingtimechange', function(event) {
+                // fires when there is a change in time to charge
+                update_status(navigator.battery);
+            });
+            navigator.battery.addEventListener('dischargingtimechange', function(event) {
+                // fires when there is a change in time to discharge
+                update_status(navigator.battery);
+            });
+            navigator.battery.addEventListener('levelchange', function(event) {
+                // fires when there is a change in battery level
+                update_status(navigator.battery);
+            });
+
+            update_status(navigator.battery);
+
+        } else {
+            document.body.className += " incapable";
+        }
+
+        function update_status(battery) {
+            // takes the battery object and then updates all of the presentation
+            // info using it.
+
+            var power = document.querySelector("#power");
+            var fullempty = document.querySelector("#fullempty");
+            var time = document.querySelector("#time");
+            var gauge = document.querySelector("#gauge");
+
+            if (battery.charging) {
+                //charging.textContent = "CHARGING";
+                fullempty.textContent = "until full";
+                time.textContent = format_time(battery.chargingTime);
+                
+            } else {
+                //charging.textContent = "DISCHARGING";
+                fullempty.textContent = "battery remaining";
+                time.textContent = format_time(battery.dischargingTime);
+            }
+
+            var power_percent =  Math.round(battery.level * 100, 2);
+
+            power.textContent = power_percent;
+            gauge.style.width = power_percent + "%";
+
+        }
+
+        function format_time(val) {
+            // takes some seconds and format it to HH:mm:ss
+
+            if (val === Infinity) return ("unknown");
+
+            var hours = Math.floor(val / 3600);
+            var mins = Math.floor((val - (hours * 3600)) / 60);
+            //var secs = val - (hours * 3600) - (mins * 60);
+
+            if (hours < 10) hours = "0" + hours;
+            if (mins < 10) mins = "0" + mins;
+            //if (secs < 10) secs = "0" + secs;
+
+            return(+ hours + ":" + mins);
+        }
+    </script>
+</body>
+</html>

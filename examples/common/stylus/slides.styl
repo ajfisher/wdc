@@ -63,7 +63,7 @@ body.capable div#info p.infomsg {
     display: block;
 }
 
-body.incapable p#incapable {
+body.incapable #incapable {
     display: block;
 }
 
@@ -93,6 +93,43 @@ body.far div#info {
     background-color: transparent;
 }
 
+/** Battery demo styles **/
+body#batterydemo.capable p {
+    display: block;
+}
+
+body#batterydemo.capable #gauge {
+    height: 1px
+    background-color: ajyellow;
+}
+
+body#batterydemo.capable div#meter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+
+body#batterydemo.incapable div#meter, body#batterydemo.capable div#info {
+    display: none;
+}
+
+div#meter p {
+    margin: 0;
+    padding: 0;
+}
+
+div#meter p#powerlevel {
+    line-height: 0;
+    padding-bottom: 1em;
+}
+span#power {
+    font-size: 18rem;
+}
+
+
+/** various media query overrides **/
+
 @media (min-width: 1000px) {
 
     html {
@@ -100,6 +137,10 @@ body.far div#info {
     }
 
     #info {
+        max-width: 50%;
+    }
+
+    #meter {
         max-width: 50%;
     }
 }

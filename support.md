@@ -42,13 +42,10 @@ Demo: /examples/battery
 Supported: Firefox all
 Unsupported:Chrome all, Safari all
 
-Notes: Only part of the spec not adopted on FF mobile is the charging / discharging
-time values. This is solvable using a battery app plug in but not natively. 
+Notes: Charging, discharging part of the spec is heavily dependent on the device.
+It was not available in FF until a recent update around 18 April for Android.
 
-
-
-
-
+Also note that on OSX FF, report is "unknown" until first tick on change.
 
 # Device Light API
 
