@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="206.13731"
+   height="303.89667"
+   viewBox="0 0 206.13731 303.89667"
+   enable-background="new 0 0 612 792"
+   xml:space="preserve"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="05-baloon.svg"><metadata
+   id="metadata3033"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs3031" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="640"
+   inkscape:window-height="480"
+   id="namedview3029"
+   showgrid="false"
+   fit-margin-top="0"
+   fit-margin-left="0"
+   fit-margin-right="0"
+   fit-margin-bottom="0"
+   inkscape:zoom="0.2979798"
+   inkscape:cx="96.153157"
+   inkscape:cy="150.599"
+   inkscape:window-x="0"
+   inkscape:window-y="24"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="Layer_1" />
+<path
+   d="m 183.45516,46.588664 c 0,0 38.333,26.32 15.333,82.492996 l -67.167,117.532 -12.051,1.391"
+   id="path3005"
+   inkscape:connector-curvature="0"
+   style="fill:#bc262c" />
+<path
+   d="m 22.682157,47.979664 c 0,0 -38.333,26.32 -15.3329995,82.492996 l 67.1669995,117.532 12.051,1.391"
+   id="path3007"
+   inkscape:connector-curvature="0"
+   style="fill:#bc262c" />
+<path
+   d="m 22.682157,47.979664 c 0,0 -38.333,26.32 -15.3329995,82.492996 l 67.1669995,117.532 12.051,1.391"
+   id="path3009"
+   inkscape:connector-curvature="0"
+   style="fill:#bc262c" />
+<path
+   d="m 77.124157,15.646664 c 0,0 -44.056,-16.49999972 -59.556,32 -15.4999995,48.5 42.612,191.717996 63.556,200.358996 h 20.892003"
+   id="path3011"
+   inkscape:connector-curvature="0"
+   style="fill:#cb3238" />
+<path
+   d="m 124.65616,15.646664 c 0,0 44.056,-16.49999972 59.556,32 15.5,48.5 -42.612,191.717996 -63.556,200.358996 H 99.764157"
+   id="path3013"
+   inkscape:connector-curvature="0"
+   style="fill:#cb3238" />
+<path
+   d="m 90.565157,248.00566 c 0,0 -52.858,-207.485996 -22.858,-238.9859957 0,0 36.640003,-20.7060003 68.807003,0.627 31.539,20.9169997 -21.877,236.7179957 -25.939,238.3589957"
+   id="path3015"
+   inkscape:connector-curvature="0"
+   style="fill:#f05561" />
+<rect
+   x="71.01516"
+   y="245.89667"
+   width="64"
+   height="4"
+   id="rect3017"
+   style="fill:#821618" />
+<path
+   d="m 71.015157,277.39666 c 0,-0.5 62.239003,0 62.239003,0 l -8.514,26.5 H 79.823157"
+   id="path3019"
+   inkscape:connector-curvature="0"
+   style="fill:#821618" />
+<line
+   stroke-miterlimit="10"
+   x1="76.071159"
+   y1="246.99866"
+   x2="85.466148"
+   y2="292.99866"
+   id="line3021"
+   style="fill:none;stroke:#821618;stroke-width:3;stroke-miterlimit:10" />
+<line
+   stroke-miterlimit="10"
+   x1="86.634148"
+   y1="246.99866"
+   x2="96.02816"
+   y2="292.99866"
+   id="line3023"
+   style="fill:none;stroke:#821618;stroke-width:3;stroke-miterlimit:10" />
+<line
+   stroke-miterlimit="10"
+   x1="130.09016"
+   y1="246.89667"
+   x2="120.69515"
+   y2="292.89667"
+   id="line3025"
+   style="fill:none;stroke:#821618;stroke-width:3;stroke-miterlimit:10" />
+<line
+   stroke-miterlimit="10"
+   x1="119.52715"
+   y1="246.89667"
+   x2="110.13317"
+   y2="292.89667"
+   id="line3027"
+   style="fill:none;stroke:#821618;stroke-width:3;stroke-miterlimit:10" />
+</svg>

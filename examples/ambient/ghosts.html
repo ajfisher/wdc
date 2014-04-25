@@ -7,9 +7,11 @@
     <title>Ambient Fun</title>
     <link rel="stylesheet" href="/examples/build/css/ghosts.css">
     <script src="/examples/common/js/headtrackr.js"></script>
+    <script src="ghosts.js"></script>
 
     <style>
         video, canvas {
+            /** flip the x-axis of the vid **/
             transform: scaleX(-1);
             -webkit-transform: scaleX(-1);
         }
@@ -44,11 +46,32 @@
             htracker.init(videoInput, canvasInput);
             htracker.start();
 
+            // I've put all the image stuff in a separate file as it's conceptually
+            // not that relevant to the demo but if you're interested in how to 
+            // put little images onto a canvas check out the ghosts.js file.
+            init_overlays();
+
             document.addEventListener('headtrackrStatus', function (evt) {
                 //
             });
 
             document.addEventListener('facetrackingEvent', function(evt) {
+                var head = {
+                    l: -(evt.width/2),
+                    r: -(evt.width/2)+evt.width,
+                    t: -(evt.height/2),
+                    b: -(evt.height/2)+evt.height,
+                    w: evt.width,
+                    h: evt.height,
+                    bounds: {
+                        l: -(evt.width*0.75),
+                        r: (evt.width*0.75)+evt.width*1.5,
+                        t: -(evt.height*0.63),
+                        b: -(evt.height*0.63)+evt.height*1.3,
+                        w: evt.width*1.5,
+                        h: evt.height*1.3
+                    }
+                }
                 octx.clearRect(0,0,320,240);
                 octx.save();
                 // translate the context to the specific point where you want to draw the boxes.
@@ -57,18 +80,17 @@
                 // face box
                 octx.strokeStyle = "rgba(240,210,50, 0.6)";
                 octx.lineWidth = 2;
-                octx.strokeRect(-(evt.width/2), -(evt.height/2), evt.width, evt.height);
+                octx.strokeRect(head.l, head.t, head.w, head.h);
                 // head box
                 octx.strokeStyle = "rgba(240,210,50, 0.2)";
                 octx.lineWidth = 1;
-                octx.strokeRect(-(evt.width*0.75), -(evt.height*0.65), evt.width*1.5, evt.height*1.3);
+                octx.strokeRect(head.bounds.l, head.bounds.t, head.bounds.w, head.bounds.h);
+
+                octx.drawImage(source,0,0, bright.images[0].width, bright.images[0].height);
 
                 // restore the context
                 octx.restore();
             });
-
-
-
         </script>
 
 </body>

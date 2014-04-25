@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="182.77333"
+   height="146.19154"
+   viewBox="0 0 182.77333 146.19154"
+   enable-background="new 0 0 612 792"
+   xml:space="preserve"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="02-bird.svg"><metadata
+   id="metadata3070"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs3068" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="513"
+   inkscape:window-height="406"
+   id="namedview3066"
+   showgrid="false"
+   fit-margin-top="0"
+   fit-margin-left="0"
+   fit-margin-right="0"
+   fit-margin-bottom="0"
+   inkscape:zoom="0.2979798"
+   inkscape:cx="91.386324"
+   inkscape:cy="54.782737"
+   inkscape:window-x="0"
+   inkscape:window-y="24"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="Layer_1" />
+<polyline
+   points="381.725,369.829 397.387,362.339 389.556,375.277 392.556,389.172 381.725,379.703 "
+   id="polyline3054"
+   style="fill:#f89727"
+   transform="translate(-214.61368,-304.5912)" />
+<path
+   d="m 132.23932,28.059799 c 0,0 -28,-26.4999998 -43.999996,-27.99999979 -16,-1.50000001 -12.5,25.60399979 -9.5,38.05199979 3,12.448 7.5,24.448 7.5,24.448 l 36.499996,-3 20,-8.5 6.5,-2"
+   id="path3056"
+   inkscape:connector-curvature="0"
+   style="fill:#f79029" />
+<ellipse
+   transform="matrix(0.9982,-0.0592,0.0592,0.9982,-236.94838,-285.0306)"
+   cx="318.74899"
+   cy="386.48499"
+   rx="65"
+   ry="57.25"
+   id="ellipse3058"
+   sodipodi:cx="318.74899"
+   sodipodi:cy="386.48499"
+   sodipodi:rx="65"
+   sodipodi:ry="57.25"
+   style="fill:#d9e028" />
+<path
+   d="m 12.368324,24.611799 c 1,0.333 54.667,-2 80.667,26.667 0,0 29.666996,30.667 -8,56.667001 0,0 -29,19 -70,-4.333 l 10.333,-4.667001 c 0,0 -24.3330004,-10 -25.33300042,-27.667 l 8.33300002,4.667 c 0,0 -9.00000002,-13.333 -8.33300002,-25.667 l 10.33300042,6.667 c 0,0 -7.0000004,-24.333 -3.0000004,-32.333"
+   id="path3060"
+   inkscape:connector-curvature="0"
+   style="fill:#f79029" />
+<path
+   d="m 43.636324,120.4288 c 0,0 -6.307,-5.148 -26.509,2.527 -20.2020004,7.675 -13.1870004,25.446 1.185,23.008 14.372,-2.437 9.878,-24.222 25.324,-25.535 z"
+   id="path3062"
+   inkscape:connector-curvature="0"
+   style="fill:#d9e028" />
+<circle
+   cx="359.55099"
+   cy="371.453"
+   r="4.302"
+   id="circle3064"
+   sodipodi:cx="359.55099"
+   sodipodi:cy="371.453"
+   sodipodi:rx="4.302"
+   sodipodi:ry="4.302"
+   style="fill:#010101"
+   transform="translate(-214.61368,-304.5912)" />
+</svg>
