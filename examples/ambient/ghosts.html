@@ -22,6 +22,10 @@
             position: absolute;
             left: 0;
         }
+
+        body.capable p#incapable {
+            display: none;
+        }
     </style>
 
 </head>
@@ -31,12 +35,13 @@
             <p id="incapable">Unfortunately your browser doesn't support the Ambient light API</p>
         </div>
         <div id="vidstream">
-            <canvas id="inputCanvas" width="320" height="240" style="display: none"></canvas>
+            <canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
             <video id="inputVideo" autoplay loop></video>
-            <canvas id="overlayCanvas" width="320" height="240"></canvas>
+            <canvas id="overlayCanvas" width="640" height="480"></canvas>
         </div>
 
         <script type="text/javascript">
+
             var videoInput = document.getElementById('inputVideo');
             var canvasInput = document.getElementById('inputCanvas');
             var overlayCanvas = document.getElementById('overlayCanvas');
@@ -51,46 +56,26 @@
             // put little images onto a canvas check out the ghosts.js file.
             init_overlays();
 
-            document.addEventListener('headtrackrStatus', function (evt) {
-                //
-            });
+            if (window.DeviceLightEvent) {
+                // capable
+                document.body.classList.add("capable");
 
-            document.addEventListener('facetrackingEvent', function(evt) {
-                var head = {
-                    l: -(evt.width/2),
-                    r: -(evt.width/2)+evt.width,
-                    t: -(evt.height/2),
-                    b: -(evt.height/2)+evt.height,
-                    w: evt.width,
-                    h: evt.height,
-                    bounds: {
-                        l: -(evt.width*0.75),
-                        r: (evt.width*0.75)+evt.width*1.5,
-                        t: -(evt.height*0.63),
-                        b: -(evt.height*0.63)+evt.height*1.3,
-                        w: evt.width*1.5,
-                        h: evt.height*1.3
+                window.addEventListener('devicelight', function(event) { 
+                        // switch states based on light levels.
+                    if (event.value < 5) {
+                        current_state = dark;
+                    } else if (event.value < 15) {
+                        current_state = dim;
+                    } else {
+                        current_state = bright;
                     }
-                }
-                octx.clearRect(0,0,320,240);
-                octx.save();
-                // translate the context to the specific point where you want to draw the boxes.
-                octx.translate(evt.x, evt.y);
-                octx.rotate(evt.angle-(Math.PI/2));
-                // face box
-                octx.strokeStyle = "rgba(240,210,50, 0.6)";
-                octx.lineWidth = 2;
-                octx.strokeRect(head.l, head.t, head.w, head.h);
-                // head box
-                octx.strokeStyle = "rgba(240,210,50, 0.2)";
-                octx.lineWidth = 1;
-                octx.strokeRect(head.bounds.l, head.bounds.t, head.bounds.w, head.bounds.h);
+                });
+            } else {
+                // incapable
+                document.body.classList.add("incapable");
+            }
 
-                octx.drawImage(source,0,0, bright.images[0].width, bright.images[0].height);
-
-                // restore the context
-                octx.restore();
-            });
+            document.addEventListener('facetrackingEvent', image_overlay);
         </script>
 
 </body>
