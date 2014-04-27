@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Contrast Demo</title>
+    <link rel="stylesheet" href="/examples/build/css/contrast.css">
+</head>
+<body>
+    <div id="main">
+        <div id="info">
+            <p id="incapable">Unfortunately your browser doesn't support the Ambient light API</p>
+        </div>
+        <section id="content">
+            <h1>Ambient light contrast demo</h1>
+            <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas turpis ut nunc bibendum, id pretium arcu elementum. Donec quis magna varius, porta nunc et, ultrices tortor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc eget elementum nulla, sit amet commodo felis. Sed tempor lorem mi, id consectetur libero imperdiet in. Aenean ut leo vitae tortor consequat luctus a sed lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc eget magna ac eros sagittis elementum quis eget nibh. Aenean vehicula urna eu orci suscipit ultrices. Duis rhoncus augue faucibus neque tempus molestie. Mauris rutrum sem id congue ultrices. Quisque vel molestie urna, at lobortis lorem. Integer sagittis sapien eu tincidunt lobortis. Curabitur in nisl lorem. Fusce nunc libero, imperdiet id ligula eget, iaculis vehicula diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+            </p>
+            <p>
+            Curabitur pharetra nulla nec aliquet pretium. Suspendisse tincidunt sit amet quam vel feugiat. Praesent ut porttitor purus. Nam ullamcorper mollis facilisis. Aliquam porta risus eget pulvinar vestibulum. Nam rutrum, lectus vel porttitor adipiscing, mauris nulla vulputate nulla, quis scelerisque eros neque et mi. Vivamus a condimentum odio. Vestibulum ut orci quis nulla eleifend rutrum. Vivamus dictum vehicula ante, id lacinia turpis viverra et. Aliquam risus diam, consectetur ut purus sed, ultricies lobortis odio. Donec imperdiet eu mauris eget dictum. Cras et dui sit amet est tristique viverra. Proin in posuere est, et luctus nisl. Nam non ultricies magna. Proin cursus sodales tortor, ut dapibus urna malesuada in. Donec volutpat turpis mauris, vitae consequat leo feugiat eu.
+            </p>
+            <p>
+            Fusce fringilla lorem malesuada facilisis egestas. Nam elementum tempus nisi ut elementum. Aenean massa dui, egestas et sem non, consectetur tempor leo. Aenean egestas orci nec accumsan posuere. Fusce justo diam, fermentum in lacinia ut, vestibulum eget risus. Nunc nunc sem, dapibus non fermentum et, volutpat in erat. Vestibulum hendrerit diam non felis mattis viverra. Sed eleifend at risus in vulputate.
+            </p> 
+        </section>
+    </div>
+    <script type="text/javascript">
+        if (window.DeviceLightEvent) {
+            // capable
+            document.body.classList.add("capable");
+        } else {
+            // incapable
+            document.body.classList.add("incapable");
+        }
+    </script>
+</body>
+</html>

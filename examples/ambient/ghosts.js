@@ -31,7 +31,7 @@ function init_overlays() {
             img.onload = function(i) {
 
                 // now we have the file, normalise it to be about 30px across.
-                var max_width = 80;
+                var max_width = 70;
                 var scale_factor = i.width / max_width;
                 i.width = max_width;
                 i.height = img.height / scale_factor;
