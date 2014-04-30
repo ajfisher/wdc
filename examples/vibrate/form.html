@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta content='width=device-width' name='viewport'>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<title>Form Vibration Prototype</title>
+	</head>
+	<body>
+		<form method="post" action="form.html">
+			<div class="each-row">
+				<h1>Form vibration prototype</h1>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas mollis nunc risus, ut pulvinar est pulvinar ut. Cras convallis sapien nec tortor consequat consectetur. Mauris tellus nisl, gravida elementum dolor faucibus, facilisis congue nibh. Pellentesque convallis felis ac leo aliquet, in imperdiet nibh tempus. Suspendisse molestie vel enim in elementum. Nullam rhoncus dictum fringilla. Ut quis magna ac lacus pellentesque tempor. Morbi luctus vulputate felis fringilla pellentesque. Maecenas accumsan justo sit amet lectus interdum fringilla. Vestibulum dignissim faucibus neque, vel lobortis elit porttitor vitae. Pellentesque ut leo tempus, ullamcorper lectus sed, rhoncus tortor. Integer in ultricies quam. Morbi sit amet erat vel augue viverra pharetra. Donec lacinia neque nec sollicitudin malesuada. Vivamus sagittis, est vitae semper consectetur, ligula sapien hendrerit arcu, a hendrerit nisl dolor vitae nisi.</p>
+			</div>
+			<div class="each-row">
+				<label for="firstname">Firstname</label>
+				<input class="field" id="firstname" name="firstname" type="text" value="" tabindex="1" />
+				<label class="error">Please fill in your firstname</label>
+			</div>
+			<div class="each-row">
+				<label for="lastname">Lastname</label>
+				<input class="field" id="lastname" name="lastname" type="text" value="" tabindex="2"/>
+				<label class="error">Please fill in your lastname</label>
+			</div>
+			<div class="each-row">
+				<label for="email">Email</label>
+				<input class="field" id="email" name="email" type="email" value="" tabindex="3" />
+				<label class="error">Please fill in a valid email address</label>
+			</div>
+			<div class="each-row">
+				<label class="ck_label" for="t_and_c">I agree to the Terms and Conditions.</label>
+				<input class="field" id="t_and_c" name="t_and_c" type="checkbox" value="agree" tabindex="4" />
+				<label class="error">You need to agree on terms and conditions</label>
+			</div>
+			<div class="each-row">
+				<input id="submit" name="submit" type="submit" value="Submit" tabindex="5" />
+			</div>
+		</form>
+		<div class="success">
+			<h1>Thank you.</h1>
+			<p>Form has been submitted successfully!</p>
+		</div>
+
+		<!-- Scripts starts -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="form.js"></script>
+	</body>
+</html>
